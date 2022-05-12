@@ -1,0 +1,17 @@
+{
+  "name": "my-health-care",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "datetime-js": "^4.0.0",
+    "mongoose": "^6.2.9",
+    "nodemon": "^2.0.15"
+  }
+}
