@@ -99,7 +99,7 @@ async function editUser(user, name, gender, birthdate, address, contact){
 
 async function getUsers() {
   let users = await User.find().sort("name");
-  console.log(users);
+  console.log("list of users:", users);
   return users;
 }
 
