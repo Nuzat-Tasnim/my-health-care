@@ -122,10 +122,8 @@ async function searchUser(name, category){
   let users = await User.find({
       [idKey]: {$ne : null},
       "name": { $regex: name, $options: "i" } 
-  })
-// .where(category+"id").ne(null)
-// .where("name").regex(name)
-// // .select('ObjectId','name');
+  });
+  
   return users;
   
 }
