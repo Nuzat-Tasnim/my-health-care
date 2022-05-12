@@ -105,7 +105,7 @@ async function getUsers() {
 
 async function getUserById(userid) {
   let user = await User.findById(userid);
-  console.log("User: ", user);
+  console.log("User:", user);
   return user;
 }
 
