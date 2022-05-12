@@ -109,15 +109,6 @@ async function getUserById(userid) {
   return user;
 }
 
-// async function getUserNames(userids) {
-//   let usersMap = new Map()
-//   userids.forEach((userid) => {
-//     let name = await User.findById(userid).select('name');
-//     usersMap.set(userid, name)
-//   })
-//   return usersMap;
-// }
-
 async function searchUser(name, category){
   let idKey = category+"id";
   let users = await User.find({
