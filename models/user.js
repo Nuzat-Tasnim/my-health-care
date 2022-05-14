@@ -3,6 +3,17 @@ const { func } = require('joi');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
+String.prototype.hashCode = function() {
+  var hash = 0, i, chr;
+  if (this.length === 0) return hash;
+  for (i = 0; i < this.length; i++) {
+    chr   = this.charCodeAt(i);
+    hash  = ((hash << 5) - hash) + chr;
+    hash |= 0; // Convert to 32bit integer
+  }
+  return hash.toString();
+}
+
 const User = mongoose.model('User', new mongoose.Schema({
   name: {
     type: String,
@@ -75,7 +86,7 @@ async function createUser(name, gender, birthdate, address, contact, email, pass
     address: address,
     contact: contact,
     email: email,
-    password: password,
+    password: password.hashCode(),
     doctorid: null,
     nurseid: null,
     patientid: null
@@ -83,6 +94,16 @@ async function createUser(name, gender, birthdate, address, contact, email, pass
   let result = await user.save();
   console.log(user, result);
   return user
+}
+
+async function login(email, password){
+  let user = await User.find({'email': email});
+  console.log(user[0].password, password.hashCode());
+  if(user.length && user[0].password === password.hashCode()){
+
+    return user[0];
+  }
+  else return null;
 }
 
 async function editUser(user, name, gender, birthdate, address, contact){
@@ -126,6 +147,7 @@ async function removeUser(user) {
 
 exports.User = User; 
 exports.createUser = createUser;
+exports.login = login;
 exports.editUser = editUser;
 exports.searchUser = searchUser;
 exports.getUsers = getUsers
