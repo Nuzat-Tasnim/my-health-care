@@ -4,7 +4,6 @@ const auth = require("../middleware/auth");
 const { getDoctor } = require("../models/doctor");
 const { createPatient, getPatient } = require("../models/patient")
 const {createAppointment, getAppointmentByQuery, getAppointmentById} = require("../models/appointment");
-// const {createAppointment, getAppointmentByDoctorId, getAppointmentById, getAppointmentByPatientid} = require("../models/appointment");
 
 router.post("/set", auth, async(req, res) => {
     let doctor = await getDoctor(req.body.doctorid);
