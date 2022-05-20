@@ -9,7 +9,7 @@ const Treatment = mongoose.model('Treatment', new mongoose.Schema({
     minlength: 2,
     maxlength: 100
   },
-  assesment: {
+  assessment: {
     type: String,
   },
   prescripton: {
@@ -34,21 +34,24 @@ const Treatment = mongoose.model('Treatment', new mongoose.Schema({
 }));
 
 
-async function createTreatment(symptom, assesment, prescripton, duration){
+async function createTreatment(symptom, assessment, prescripton, duration){
   let treatment = new Treatment({
     symptom: symptom,
-    assesment: assesment,
+    assessment: assessment,
     prescripton: prescripton,
     duration: duration,
     date: new Date()
   });
-  let result = await treatment.save();
-  console.log(treatment, result);
+  treatment = await treatment.save();
   return treatment;
 }
 
-async function getTreatments(){
-  return await Treatment.find().sort("date")
+async function getTreatments(patientid){
+  try{
+    let treatments = await Treatment.find({"patientid": patientid}).sort("date")
+    return treatments; 
+  }
+  catch(err){ return null; }
 }
 
 async function getTreatment(treatmentId){

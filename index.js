@@ -1,3 +1,4 @@
+const config = require("config");
 const mongoose = require("mongoose");
 const posts = require('./routes/posts');
 const users = require('./routes/users');
@@ -5,9 +6,15 @@ const treatments = require('./routes/treatments');
 const patients = require('./routes/patients');
 const doctors = require('./routes/doctors');
 const nurses = require('./routes/nurses');
+const auth = require('./routes/auth');
 const appointments = require('./routes/appointments');
 // const dataentry = require('./routes/dataentry');
 
+
+if(!config.get("jwtPrivateKey")){
+  console.error("FATAL ERROR: jwtPrivateKey is not defined.");
+  process.exit(1);
+}
 
 const express = require('express');
 const app = express();
@@ -20,6 +27,7 @@ mongoose.connect(cloudDBUrl)
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
 app.use(express.json());
+app.use('/auth', auth);
 app.use('/posts', posts);
 app.use('/users', users);
 app.use('/treatments', treatments)

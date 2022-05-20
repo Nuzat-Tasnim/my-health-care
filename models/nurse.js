@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
-const {User, getUserById, getUserNames, searchUser} = require("../models/user");
+const { searchUser, addRoles } = require("../models/user");
 
 const Nurse = mongoose.model('Nurse', new mongoose.Schema({
   userid: {
@@ -18,34 +18,40 @@ const Nurse = mongoose.model('Nurse', new mongoose.Schema({
   
 }));
 
-async function createNurse(userid){
-  let user = await User.findById(userid);
-  let nurse = new Nurse({userid: userid});
-  nurse = await nurse.save();
-  user.nurseid = nurse._id;
-  result = await user.save();
-  return nurse;
+async function createNurse(user){
+  try{
+    let nurse = new Nurse({userid: user._id});
+    nurse = await nurse.save();
+
+    user = await addRoles(user, "Nurse", nurse._id, "nurseid");
+    if(!user) return null;
+
+    return nurse;
+  }
+  catch(err){ return null; }
 }
 
 async function getNurseById(nurseid){
   return await Nurse.findById(nurseid);
 }
 
-
 async function getNurseByName(name){  
-  let users = searchUser(name, "nurse");
+  let users = await searchUser(name, "nurse");
   return users;
 }
 
-async function addPatient(nurseid,patientid){
-  let nurse = await Nurse.findById(nurseid);
+async function assignPatient(nurse, patientid){
   nurse.assignedTo.push(patientid);
-  await nurse.save();
-  return nurse;
+  try{
+    nurse = await nurse.save();
+    return nurse;
+  }
+  catch(err){ return null; }
+  
 }
-
 
 exports.Nurse = Nurse; 
 exports.createNurse = createNurse;
-exports.addPatient = addPatient;
+exports.getNurseById = getNurseById;
+exports.assignPatient = assignPatient;
 exports.getNurseByName = getNurseByName

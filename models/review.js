@@ -15,29 +15,39 @@ const Review = mongoose.model('Review', new mongoose.Schema({
     ref: "Doctor",
   },
   rate: {
-      type: int
+      type: Number
   },
   text: {
-    type: string
+    type: String
 }
   
 }));
 
 async function createReview(patientid, doctorid, rate, text){
   let doctor = await Doctor.findById(doctorid);
+  let patient = await Patient.findById(patientid);
+  if(!doctor || !patient) return "404";
+
   let rateOld = doctor.rate;
   let n = await Review.count(doctorid);
-  rateNew = (n * rateOld + rate)/(n+1)
-  rateDoctor(doctorid, rateNew);
+  rateNew = (n * rateOld + rate)/(n+1);
+  doctor = await rateDoctor(doctorid, rateNew);
+  if(doctor.rate != rateNew) return "500";
 
-  let review = new Review({
-    patient: patientid,
-    doctor: doctorid,
-    rate: rate,
-    text: text
-  });
-  await review.save();
-  console.log(result);
+  try{
+    let review = new Review({
+      patient: patientid,
+      doctor: doctorid,
+      rate: rate,
+      text: text
+    });
+    review = await review.save();
+    if(review) return doctor;
+  }
+  catch(error){
+    console.log(error);
+    return "500";
+  }
 
 }
 

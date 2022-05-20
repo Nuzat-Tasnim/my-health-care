@@ -43,16 +43,18 @@ const Post = mongoose.model('Post', new mongoose.Schema({
 // }
 
 async function createPost(username, bloodType, text, contact){
-  let post = new Post({
-    username: username,
-    bloodType: bloodType,
-    text: text,
-    contact: contact,
-    date: new Date()
-  });
-  let result = await post.save();
-  console.log(post, result);
-  return post;
+  try{
+    let post = new Post({
+      username: username,
+      bloodType: bloodType,
+      text: text,
+      contact: contact,
+      date: new Date()
+    });
+    post = await post.save();
+    return post;
+  }
+  catch(err){ return null; }
 }
 
 async function getPosts() {

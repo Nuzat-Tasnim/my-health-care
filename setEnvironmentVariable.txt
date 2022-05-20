@@ -1,0 +1,1 @@
+set healthCare_jwtPrivateKey=healthCare2022

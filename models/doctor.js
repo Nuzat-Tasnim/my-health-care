@@ -1,7 +1,6 @@
 const express = require('express');
-const Joi = require('joi');
 const mongoose = require('mongoose');
-const {searchUser, User} = require("../models/user");
+const {searchUser, addRoles} = require("../models/user");
 
 
 const Doctor = mongoose.model('Doctor', new mongoose.Schema({
@@ -22,24 +21,36 @@ const Doctor = mongoose.model('Doctor', new mongoose.Schema({
   
 }));
 
-async function createDoctor(userid, areaOfExpertise){
-  let doctor = new Doctor({
-    userid: userid,
-    areaOfExpertise: areaOfExpertise
-  });
-  doctor = await doctor.save();
-  let user = await User.findById(userid);
-  user.doctorid = doctor._id;
-  user = await user.save();
-  return doctor;
+
+async function createDoctor(user, areaOfExpertise){
+  try{
+    let doctor = new Doctor({
+      userid: user._id,
+      areaOfExpertise: areaOfExpertise
+    });
+    doctor = await doctor.save();
+    user = await addRoles(user, "Doctor", doctor._id, "doctorid");
+    if(!user) return null;
+
+    return doctor;
+  }
+  catch(err){
+    console.log(err);
+    return null;
+  }
 }
 
 
 async function rateDoctor(doctorid, rate){
     let doctor = await Doctor.findById(doctorid);
     doctor.rate = rate;
-    let result = await doctor.save();
-  console.log(result);
+    doctor = await doctor.save();
+    return doctor;
+}
+
+async function getDoctor(doctorid){
+  let doctor = await Doctor.findById(doctorid);
+  return doctor;
 }
 
 async function getDoctorByName(name){  
@@ -48,6 +59,7 @@ async function getDoctorByName(name){
 }
 
 exports.createDoctor = createDoctor;
+exports.getDoctor = getDoctor;
 exports.rateDoctor = rateDoctor;
 exports.getDoctorByName = getDoctorByName;
 

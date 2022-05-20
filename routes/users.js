@@ -1,43 +1,49 @@
 const express = require("express");
 const router = express.Router();
-const {User, createUser, login, getUsers, getUserById, removeUser} = require("../models/user");
+const auth = require("../middleware/auth");
+const {editUser, getUsers, getUserById, removeUser} = require("../models/user");
 
 router.get("/all", async (req, res) => {
     let users = await getUsers();
     res.send(users);
 });
 
-router.get("/login", async (req, res) => {
-    console.log(req.body.email, req.body.password);
-    let user = await login(req.body.email, req.body.password);
-    console.log(user);
-    res.send(user);
+router.get("/:userId", auth, async (req, res) => {
+    let user = await getUserById(req.params.userId);
+    if(!user) return res.status(404).send("User not found.");
+
+    if(req.user._id != req.params.userId) return res.status(403).send("Forbidden.");
+
+    return res.send(user);
 });
 
+router.post("/editUser/:userId", auth, async (req, res) => {
+    let user = await getUserById(req.params.userId);
 
-router.get("/:userId", async (req, res) => {
-    let user = await getUserById(req.params.userId)
-    res.send(user);
-});
+    if(!user) return res.status(404).send("User not found.");
 
-router.post("/adduser", async (req, res) => {
-    let user = await createUser(req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact, req.body.email, req.body.password);
-    res.send(user);
-});
+    if(req.user._id != req.params.userId) return res.status(403).send("Forbidden.");
 
-
-router.post("/editUser/:userId", async (req, res) => {
-    let user = await getUserById(req.params.userid)
     user = editUser(user, req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact);
+    if(typeof(user) === "string") return res.status(400).send(user);
+
+    //fix this
+    user = await getUserById(req.params.userId);
+    user = await getUserById(req.params.userId);
     res.send(user);
 });
-
 
 router.delete("/removeuser", async (req, res) => {
     let user = await getUserById(req.body.userid);
-    await removeUser(user);
-    let users = await getUsers();
-    res.send(users);
+    if(!user) return res.status(404).send("User not found.");
+
+    if(!("Admin" in req.user.roles)  || (req.user._id != req.body.userid)) return res.status(403).send("Forbidden.");
+
+    let result = await removeUser(user);
+    
+    if(!result) return res.status(500).send("Something went wrong! PLease try again later.");
+    
+    res.send(user);
 });
 
 module.exports = router; 

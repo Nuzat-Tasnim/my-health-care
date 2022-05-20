@@ -20,40 +20,53 @@ const Appointment = mongoose.model('Appointment', new mongoose.Schema({
   
 }));
 
-async function createAppointment(doctorid, patientid, date){
-  let appointment = new Appointment({
-    doctor: doctorid,
-    patientid: patientid,
-    date: date
-  });
-  let result = await appointment.save();
-  console.log(appointment,result);
+async function createAppointment(doctorid, patientid, year, month, day){
+  try{
+    let appointment = new Appointment({
+      doctor: doctorid,
+      patientid: patientid,
+      date: new Date(year, month, day)
+    });
+    appointment = await appointment.save();
+    return appointment;
+  }
+  catch(err){ return null; }
 }
 
-// for doctor, to search My Appointments
-async function getAppointmentByDoctorId(doctorid){
-  let appointments = await Appointment.find({'doctorid': doctorid});
-  return appointments;
-}
-async function getAppointmentByUserId(userid){
-  let appointments = await Appointment.find({'userid': userid});
-  return appointments;
-}
-
-// .....not sure,,, same... almost??
-async function getAppointmentByDoctorIdDate(doctorid, date){
-  let appointments = await Appointment.find({'doctorid': doctorid, 'date': date});
-  return appointments
-}
-
-// like, you know, to view the appointment
 async function getAppointmentById(appointmentId){
   let appointment = await Appointment.findById(appointmentId);
   return appointment
 }
 
+async function getAppointmentByQuery(query){
+  try{
+    let appointments = await Appointment.find(query);
+    return appointments;
+  }
+  catch(err){ return null; }
+}
+
+// // for doctor, to search My Appointments
+// async function getAppointmentByDoctorId(doctorid){
+//   try{
+//     let appointments = await Appointment.find({'doctorid': doctorid});
+//     return appointments;
+//   }
+//   catch(err){ return null; }
+// }
+
+// async function getAppointmentByPatientid(patientid){
+//   try{
+//     let appointments = await Appointment.find({'patientid': patientid});
+//     return appointments;
+//   }
+//   catch(err){ return null; }
+// }
+
 exports.createAppointment = createAppointment; 
-exports.getAppointmentByDoctorId = getAppointmentByDoctorId;
-exports.getAppointmentByUserId = getAppointmentByUserId;
 exports.getAppointmentById = getAppointmentById;
+exports.getAppointmentByQuery = getAppointmentByQuery;
+
+// exports.getAppointmentByDoctorId = getAppointmentByDoctorId;
+// exports.getAppointmentByPatientid = getAppointmentByPatientid;
 
