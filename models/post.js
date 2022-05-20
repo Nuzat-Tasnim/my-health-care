@@ -5,42 +5,24 @@ const mongoose = require('mongoose');
 const Post = mongoose.model('Post', new mongoose.Schema({
   username: {
     type: String,
-    required: true,
-    minlength: 3,
-    maxlength: 50
+    required: true
   },
   bloodType: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 4
+    required: true
   },
   text: {
     type: String,
-    default: false
   },
   contact: {
     type: String,
-    required: true,
-    minlength: 5,
-    maxlength: 50
+    required: true
   },
   date: {
     type: Date
   }
   
 }));
-
-// function validatePost(post) {
-//   const schema = {
-//     username: Joi.string().min(3).max(50).required(),
-//     bloodType: Joi.string().min(2).maxlength(4).required(),
-//     text: Joi.string(),
-//     contact: Joi.string().min(5).max(50).required()
-//   };
-
-//   return Joi.validatePost(post, schema);
-// }
 
 async function createPost(username, bloodType, text, contact){
   try{

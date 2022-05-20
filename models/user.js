@@ -118,7 +118,7 @@ async function createUser(name, gender, year, month, date, address, contact, ema
     nurseid: null,
     patientid: null,
     adminid: null,
-    roles: ["lmao"]
+    roles: []
   });
   user = await user.save();
   console.log(user);
