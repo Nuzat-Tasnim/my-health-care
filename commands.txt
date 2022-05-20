@@ -1,0 +1,11 @@
+Environment variable:
+set healthCare_jwtPrivateKey=healthCare2022
+
+
+Deployment:
+git push heroku HEAD:main
+heroku ps:scale web=1
+
+
+Logs:
+heroku logs --tail
