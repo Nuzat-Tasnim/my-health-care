@@ -11,12 +11,12 @@ const Admin = mongoose.model('Admin', new mongoose.Schema({
   
 }));
 
-async function createAdmin(userid){
+async function createAdmin(user){
   try{
-    let admin = new Admin({userid: userid, log: []});
+    let admin = new Admin({userid: user._id, log: []});
     admin = await admin.save();
 
-    let user = await addRoles(user, "Admin", admin._id, "adminid");
+    user = await addRoles(user, "Admin", admin._id, "adminid");
     if(!user) return null;
 
     return admin;

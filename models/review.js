@@ -23,10 +23,7 @@ const Review = mongoose.model('Review', new mongoose.Schema({
   
 }));
 
-async function createReview(patientid, doctorid, rate, text){
-  let doctor = await Doctor.findById(doctorid);
-  let patient = await Patient.findById(patientid);
-  if(!doctor || !patient) return "404";
+async function createReview(doctor, patientid, rate, text){
 
   let rateOld = doctor.rate;
   let n = await Review.count(doctorid);

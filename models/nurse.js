@@ -47,8 +47,9 @@ async function assignPatient(nurse, patientid){
     return nurse;
   }
   catch(err){ return null; }
-  
 }
+
+
 
 exports.Nurse = Nurse; 
 exports.createNurse = createNurse;

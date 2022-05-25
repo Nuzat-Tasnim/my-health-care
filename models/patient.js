@@ -1,6 +1,8 @@
 const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
+const { addRoles } = require("../models/user");
+
 
 var dateObj = new Date();
 
@@ -9,15 +11,8 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
-  bloodType: {
-    type: String,
-    minlength: 2,
-    maxlength: 4
-  },
-  allergies: {
-    type: String,
-    minlength: 3,
-  },
+  bloodType: { type: String },
+  allergies: { type: String },
   treatments: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -27,21 +22,26 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
   
 }));
 
-async function createPatient(userid){
+async function createPatient(user){
+  console.log(user);
+
   try{
     let patient = new Patient({
-      userid: userid,
+      userid: user._id,
       bloodtype: "",
       allergies: "",
       treatments: []
     });
     patient = await patient.save();
-    
+    console.log(user, patient);
     user = await addRoles(user, "Patient", patient._id, "patientid");
+    console.log(user);
     if(!user) return null;
     return patient;
   }
-  catch(err){ return null; }
+  catch(err){ 
+    console.log(err);
+    return null; }
 }
 
 async function updateProfile(patient, bloodtype, allergies){

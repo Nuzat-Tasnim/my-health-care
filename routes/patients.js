@@ -4,15 +4,23 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const { getUserById } = require("../models/user");
 const { getTreatment } = require("../models/treatment");
-const {Patient, createPatient, updateProfile, addTreatment, getPatient } = require("../models/patient");
+const { getNurseById } = require("../models/nurse");
+const { getAppointmentByQuery } = require("../models/appointment");
+const { createPatient, updateProfile, addTreatment, getPatient } = require("../models/patient");
 
 router.get("/:patientid", auth, async(req, res) => {
-    let condition1 = "Admin" in req.user.roles;
-    let condition2 = "Doctor" in req.user.roles;
-    let condition3 = "Nurse" in req.user.roles;
+    let condition1 = req.user.roles.includes("Admin");
+    let condition2 = req.user.roles.includes("Doctor");
+    let condition3 = req.user.roles.includes("Nurse");
     let condition4 =  req.params.patientid === req.user.patientid;
+    
 
     if(!condition1 && !condition2 && !condition3 && !condition4) return res.status(403).send("Forbidden");
+
+    if(condition3){
+        let condition5 = await getNurseById(req.user.nurseid).assignedTo.includes(req.params.patientid);
+        if(!condition5) return res.status(403).send("Forbidden");
+    }
 
     let patient = await getPatient(req.params.patientid);
     if(!patient) return res.status(404).send("User not found.");
@@ -22,11 +30,23 @@ router.get("/:patientid", auth, async(req, res) => {
 
 router.put("/update/:patientid", auth, async(req, res) => {
 
-    let condition2 = "Doctor" in req.user.roles;
-    let condition3 = "Nurse" in req.user.roles;
+    let condition2 = req.user.roles.includes("Doctor");
+    let condition3 = req.user.roles.includes("Nurse");
     let condition4 =  req.params.patientid === req.user.patientid;
+    let condition5 = await getNurseById(req.user.nurseid).assignedTo.includes(req.params.patientid);
 
     if(!condition2 && !condition3 && !condition4) return res.status(403).send("Forbidden");
+
+    if(condition2){
+        let query = {'doctorid': req.user.doctorid, 'patientid': req.params.patientid};
+        let appointments = await getAppointmentByQuery(query);
+        if(!appointments) return res.status(403).send("Forbidden");
+    }
+
+    if(condition3){
+        let condition5 = await getNurseById(req.user.nurseid).assignedTo.includes(req.params.patientid);
+        if(!condition5) return res.status(403).send("Forbidden");
+    }   
     
     //Update further that only certain doctors and nurses will have the authorization.
 
@@ -40,24 +60,23 @@ router.put("/update/:patientid", auth, async(req, res) => {
 });
 
 router.post("/create", auth, async (req, res) => {
-    if(!("Admin" in req.user.roles)) return res.status(403).send("Forbidden");
 
-    let patient = getUserById(req.body.patientid);
-    if(!patient) return res.status(404).send("User not found.");
+    let user = await getUserById(req.body.userid);
+    if(!user) return res.status(404).send("User not found.");
 
-    patient = await createPatient(req.body.userid);
+    patient = await createPatient(user);
     if(!patient) return res.status(500).send("Something went wrong! Please try again later.");
 
     res.send(patient);
 });
 
 router.post("/addTreatment", async (req, res) => {
-    let condition2 = "Doctor" in req.user.roles;
-    let condition3 = "Nurse" in req.user.roles;
+    let condition2 = req.user.roles.includes("Doctor");
+    let condition3 = req.user.roles.includes("Nurse");
 
     if(!condition2 && !condition3) return res.status(403).send("Forbidden");
 
-    let patient = getUserById(req.body.patientid);
+    let patient = await getUserById(req.body.patientid);
     if(!patient) return res.status(404).send("User not found.");
 
     let treatment = getTreatment(req.body.treatmentid);

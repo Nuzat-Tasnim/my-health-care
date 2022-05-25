@@ -13,8 +13,13 @@ router.get("/login", async (req, res) => {
     res.send(token);
 });
 
+router.get("/refreshToken", async(req, res) => {
+    const token = user.generateAuthToken();
+    res.send(token);
+})
 
-router.post("/adduser", async (req, res) => {
+
+router.post("/register", async (req, res) => {
     const { error } = validate(req.body); // check the validate function once more
     if (error) return res.status(400).send(error.details[0].message);
     
@@ -30,4 +35,3 @@ router.post("/adduser", async (req, res) => {
 
 
 module.exports = router; 
-

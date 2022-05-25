@@ -157,10 +157,16 @@ async function editUser(user, name, gender, birthdate, address, contact){
 
 async function addRoles(user, role, id, idKey){
   try{
+    console.log(user);
     user.roles.push(role);
+    console.log(user);
     user[idKey] = id;
     user = await user.save();
-    return user;
+
+    //token fix this one
+    let token = user.generateAuthToken();
+    console.log(token);
+    return token;
   }
   catch(err){ 
     console.log(err);
@@ -222,4 +228,3 @@ exports.searchUser = searchUser;
 exports.getUsers = getUsers
 exports.getUserById = getUserById
 exports.removeUser = removeUser
-

@@ -15,23 +15,23 @@ const Doctor = mongoose.model('Doctor', new mongoose.Schema({
   rate: {
       type: Number
   },
-  maxAppointment: {
-    type: Number
+  schedule: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Schedule"
   }
   
 }));
 
 
-async function createDoctor(user, areaOfExpertise){
+async function createDoctor(user, userid, areaOfExpertise){
   try{
     let doctor = new Doctor({
-      userid: user._id,
+      userid: userid,
       areaOfExpertise: areaOfExpertise
     });
     doctor = await doctor.save();
     user = await addRoles(user, "Doctor", doctor._id, "doctorid");
     if(!user) return null;
-
     return doctor;
   }
   catch(err){
@@ -58,7 +58,19 @@ async function getDoctorByName(name){
   return users;
 }
 
+async function addSchedule(doctor, scheduleid){
+  doctor.schedule = scheduleid;
+  try{
+    doctor = await doctor.save();
+    return doctor;
+  }
+  catch(err){
+    return null;
+  }
+}
+
 exports.createDoctor = createDoctor;
+exports.addSchedule = addSchedule;
 exports.getDoctor = getDoctor;
 exports.rateDoctor = rateDoctor;
 exports.getDoctorByName = getDoctorByName;

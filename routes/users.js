@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const {editUser, getUsers, getUserById, removeUser} = require("../models/user");
+const {editUser, getUsers, getUserById, removeUser, User} = require("../models/user");
 
 router.get("/all", async (req, res) => {
     let users = await getUsers();
@@ -12,7 +12,7 @@ router.get("/:userId", auth, async (req, res) => {
     let user = await getUserById(req.params.userId);
     if(!user) return res.status(404).send("User not found.");
 
-    if(req.user._id != req.params.userId) return res.status(403).send("Forbidden.");
+    if(!(req.user.roles.includes("Admin"))  || (req.user._id != req.params.userId)) return res.status(403).send("Forbidden.");
 
     return res.send(user);
 });
@@ -37,7 +37,7 @@ router.delete("/removeuser", async (req, res) => {
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    if(!("Admin" in req.user.roles)  || (req.user._id != req.body.userid)) return res.status(403).send("Forbidden.");
+    if(!(req.user.roles.includes("Admin"))  || (req.user._id != req.body.userid)) return res.status(403).send("Forbidden.");
 
     let result = await removeUser(user);
     
@@ -45,6 +45,7 @@ router.delete("/removeuser", async (req, res) => {
     
     res.send(user);
 });
+
 
 module.exports = router; 
 

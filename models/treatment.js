@@ -20,10 +20,18 @@ const Treatment = mongoose.model('Treatment', new mongoose.Schema({
   duration: {
     type: String
   },
+  weight: {
+    type: Number
+  },
+  pressure: {
+    type: Number
+  },
+  sugarLevel: {
+    type: Number
+  },
   date: {
       type: Date
   },
-  
   nurseAssigned: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -34,12 +42,15 @@ const Treatment = mongoose.model('Treatment', new mongoose.Schema({
 }));
 
 
-async function createTreatment(symptom, assessment, prescripton, duration){
+async function createTreatment(symptom, assessment, prescripton, duration, weight, pressure, sugarLevel){
   let treatment = new Treatment({
     symptom: symptom,
     assessment: assessment,
     prescripton: prescripton,
     duration: duration,
+    weight: weight,
+    pressure: pressure,
+    sugarLevel: sugarLevel,
     date: new Date()
   });
   treatment = await treatment.save();
@@ -57,8 +68,35 @@ async function getTreatments(patientid){
 async function getTreatment(treatmentId){
   return await Treatment.findById(treatmentId)
 }
+
+async function getTreatmentByQuery(query){
+  let treatments = [];
+  try{
+    treatments = await Treatment.find(query);
+    return treatments;
+  }
+  catch(err){ return null; }
+}
+
+function getPlotValues(treatments){
+  let values = [];
+  treatments.forEach(treatment => {
+    let value = {
+      date: treatment.date,
+      weight: treatment.weight,
+      pressure: treatment.pressure,
+      sugarLevel: treatment.sugarLevel
+    }
+    values.push(value);
+  });
+  console.log(values);
+  return values;
+}
+
+
 exports.Treatment = Treatment; 
 exports.createTreatment = createTreatment;
 exports.getTreatment = getTreatment;
 exports.getTreatments = getTreatments;
-
+exports.getTreatmentByQuery = getTreatmentByQuery;
+exports.getPlotValues = getPlotValues;
