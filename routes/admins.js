@@ -5,7 +5,6 @@ const { getUserById } = require("../models/user");
 const {createAdmin, getAdmin, logEntry, logs} = require("../models/admin");
 
 router.post("/create", auth, async (req, res) => {
-    console.log(req.body.userid);
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 

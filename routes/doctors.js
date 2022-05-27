@@ -16,8 +16,6 @@ router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    console.log(req.user.roles);
-
     if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
 
     let doctor = await createDoctor(user, req.body.userid, req.body.areaOfExpertise);
@@ -33,13 +31,15 @@ router.get("/:doctorid", async (req, res) => {
 
 router.post("/rate/:doctorid", auth, async (req, res) => {
 
+    if(!req.user.roles.includes("Patient")) return res.status(403).send("Forbidden");
+
     let doctor = await getDoctor(req.params.doctorid);
     if(!doctor) return res.status(404).send("User not found.");
 
-    let patient = await getPatient(req.params.patientid);
-    if(!patient) return res.status(404).send("User not found.");
+    let query = {'doctorid': req.user.doctorid, 'patientid': req.user.patientid};
+    let appointments = await getAppointmentByQuery(query);
+    if(!appointments) return res.status(403).send("Forbidden");
 
-    //need to update this function so only real patients can review.
     let result = createReview(doctor, req.body.patientid, req.body.rate, req.body.text);
     if(result === "404") return res.status(404).send("Invalid objectid.");
     if(result === "500") return res.status(500).send("Something went wrong! PLease try again later.");
@@ -49,6 +49,8 @@ router.post("/rate/:doctorid", auth, async (req, res) => {
 router.post("/addSchedule", auth, async (req, res) => {
     let doctor = await getDoctor(req.body.doctorid);
     if(!doctor) return res.status(404).send("User not found.");
+
+    if(!(req.user.roles.includes("Doctor") & (req.user.doctorid === req.body.doctorid))) return res.status(403).send("Forbidden");
 
     let schedule = await addSchedule(doctor, req.body.scheduleid);
     if(!schedule) return res.status(500).send("Something went wrong! PLease try again later.");

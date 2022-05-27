@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     if(user) return res.status(400).send('User already registered.');
 
-    user = await createUser(req.body.name, req.body.gender, req.body.year, req.body.month, req.body.date, req.body.address, req.body.contact, req.body.email, req.body.password);
+    user = await createUser(req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact, req.body.email, req.body.password);
     // res.send(user);
 
     const token = user.generateAuthToken();

@@ -18,13 +18,13 @@ router.post("/set", auth, async(req, res) => {
     }
     else patientid = req.user.patientid;
 
-    let valid = await validate(doctor, patientid, req.body.year, req.body.month, req.body.date);
+    let valid = await validate(doctor, patientid, req.body.date);
     if(valid === false)  return res.status(400).send("Please choose another date for appointment.");
 
     if(valid ===  null) return res.status(500).send("Something went wrong! PLease try again later.");
 
     if(valid){
-        let appointment = await createAppointment(req.body.doctorid,patientid,req.body.year, req.body.month, req.body.date);
+        let appointment = await createAppointment(req.body.doctorid,patientid, req.body.date);
         if(!appointment) return res.status(500).send("Something went wrong! PLease try again later.");
         res.send(appointment);
     }
@@ -70,25 +70,5 @@ router.get("/:appointmentid", auth, async (req, res) => {
     
 //     res.send(await Appointment.deleteMany({}));
 // })
-
-
-// router.get("/doctor/:doctorid", async (req, res) => {
-//     let doctor = await getDoctor(req.params.doctorid);
-//     if(!doctor) return res.status(400).send("User not found.");
-
-//     let appointments = await getAppointmentByDoctorId(req.params.doctorid);
-//     res.send(appointments);
-// });
-
-// router.get("/:appointmentid", async (req, res) => {
-//     let appointments = await getAppointmentById(req.params.appointmentid);
-//     if(!appointment) return res.status(400).send("Invalid objectId.");
-//     res.send(appointments);
-// });
-
-// router.get("/patient/:patientid", async (req, res) => {
-//     let appointments = await getAppointmentByPatientid(req.params.patientid);
-//     res.send(appointments);
-// });
 
 module.exports = router; 

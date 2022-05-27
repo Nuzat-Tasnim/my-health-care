@@ -7,7 +7,7 @@ const Post = mongoose.model('Post', new mongoose.Schema({
     type: String,
     required: true
   },
-  bloodType: {
+  bloodtype: {
     type: String,
     required: true
   },
@@ -28,7 +28,7 @@ async function createPost(username, bloodType, text, contact){
   try{
     let post = new Post({
       username: username,
-      bloodType: bloodType,
+      bloodtype: bloodType,
       text: text,
       contact: contact,
       date: new Date()

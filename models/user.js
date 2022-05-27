@@ -3,55 +3,24 @@ const Joi = require('joi');
 const jwt = require('jsonwebtoken');
 const config = require("config");
 const mongoose = require('mongoose');
+const { hash } = require("../cryptoJS/aes");
 const res = require('express/lib/response');
 const { query } = require('express');
+const { has } = require('config');
 
-String.prototype.hashCode = function() {
-  var hash = 0, i, chr;
-  if (this.length === 0) return hash;
-  for (i = 0; i < this.length; i++) {
-    chr   = this.charCodeAt(i);
-    hash  = ((hash << 5) - hash) + chr;
-    hash |= 0; // Convert to 32bit integer
-  }
-  console.log("hashcode ",hash);
-  return hash.toString();
-}
+
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 50
-  },
-  gender: {
-    type: String,
-    required: true,
-    minlength: 4,
-    maxlength: 15
-  },
+  name: { type: String },
+  gender: { type: String },
   birthdate: {
       type: Date,
       required: true,
   },
-  address: {
-    type: String
-  },
-  contact: {
-    type: String,
-    minlength: 5,
-    maxlength: 50
-  },
-  email: {
-    type: String,
-    minlength: 6,
-    maxlength: 60
-  },
-  password: {
-    type: String,
-    minlength: 6,
-    maxlength: 30,
-  },
+  age: { type: Number },
+  address: { type: String },
+  contact: { type: String },
+  email: { type: String },
+  password: { type: String },
   doctorid: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Doctor"
@@ -68,9 +37,7 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin"
   },
-  roles: [{
-      type: String
-    }]
+  roles: [{ type: String }]
 });
 
 userSchema.methods.generateAuthToken = function() {
@@ -92,9 +59,7 @@ function validate(user) {
   const schema = Joi.object({
     name: Joi.string().min(2).max(50).required(),
     gender: Joi.string().min(4).max(15).required(),
-    year: Joi.number(),
-    month: Joi.number(),
-    date: Joi.number(),
+    birthdate: Joi.string(),
     address: Joi.string(),
     contact: Joi.string().min(5).max(50),
     email: Joi.string().email().min(6).max(60),
@@ -105,15 +70,18 @@ function validate(user) {
   return x;
 }
 
-async function createUser(name, gender, year, month, date, address, contact, email, password){
+async function createUser(name, gender, birthdate, address, contact, email, password){
+  let date = new Date(birthdate);
+
   let user = new User({
     name: name,
     gender: gender,
-    birthdate: new Date(year, month, date),
+    birthdate: date,
+    age: getAge(date),
     address: address,
     contact: contact,
     email: email,
-    password: password.hashCode(),
+    password: hash(password),
     doctorid: null,
     nurseid: null,
     patientid: null,
@@ -127,16 +95,17 @@ async function createUser(name, gender, year, month, date, address, contact, ema
 
 async function login(email, password){
   let user = await User.findOne({'email': email});
-  if(user && user.password === password.hashCode()){
+  if(user && user.password === hash(password)){
     return user;
   }
   else return null;
 }
 
+
 async function editUser(user, name, gender, birthdate, address, contact){
   user.name = name;
   user.gender = gender;
-  user.birthdate = birthdate;
+  user.birthdate = new Date(birthdate);
   user.address = address;
   user.contact = contact;
 
@@ -151,8 +120,13 @@ async function editUser(user, name, gender, birthdate, address, contact){
   });
   if(error) return error.details[0].message;
 
-  user = await user.save();
-  return user;
+  try{
+    user = await user.save();
+    return user;
+  }
+  catch(err){
+    return err;
+  }
 }
 
 async function addRoles(user, role, id, idKey){
@@ -216,6 +190,16 @@ async function removeUser(user) {
     console.log(error);
     return null;
   }
+}
+
+function getAge(birthDate) {
+  var today = new Date();
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+  }
+  return age;
 }
 
 exports.User = User; 

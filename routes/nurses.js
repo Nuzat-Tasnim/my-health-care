@@ -7,7 +7,11 @@ const {createNurse, getNurseById, assignPatient, getNurseByName} = require("../m
 
 router.post("/assignPatient", auth, async (req, res) => {
 
-    if(!("Doctor" in req.user.roles)) return res.status(403).send("Forbidden");
+    if(!(req.user.roles.includes("Doctor"))) return res.status(403).send("Forbidden");
+
+    let query = {'doctorid': req.user.doctorid, 'patientid': req.body.patientid};
+    let appointments = await getAppointmentByQuery(query);
+    if(!appointments) return res.status(403).send("Forbidden");
 
     let nurse = getNurseById(req.body.nurseid);
     if(!nurse) return res.status(404).send("User not found.");

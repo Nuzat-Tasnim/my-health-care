@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 const { addRoles } = require("../models/user");
-
+const { decryptString, encryptString } = require("../cryptoJS/aes");
 
 var dateObj = new Date();
 
@@ -11,20 +11,33 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
-  bloodType: { type: String },
+  bloodtype: { type: String },
   allergies: { type: String },
   treatments: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Treatment"
     }
-  ]
+  ],
+  myDoctors: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Doctor"
+  }]
   
 }));
 
-async function createPatient(user){
-  console.log(user);
+function encrypt(patient){
+  patient.bloodtype = encryptString(patient.bloodtype);
+  patient.allergies = encryptString(patient.allergies);
+  return patient
+}
+function decrypt(patient){
+  patient.bloodtype = decryptString(patient.bloodtype);
+  patient.allergies = decryptString(patient.allergies);
+  return patient
+}
 
+async function createPatient(user){
   try{
     let patient = new Patient({
       userid: user._id,
@@ -33,9 +46,7 @@ async function createPatient(user){
       treatments: []
     });
     patient = await patient.save();
-    console.log(user, patient);
     user = await addRoles(user, "Patient", patient._id, "patientid");
-    console.log(user);
     if(!user) return null;
     return patient;
   }
@@ -46,12 +57,14 @@ async function createPatient(user){
 
 async function updateProfile(patient, bloodtype, allergies){
   try{
+    
+    patient.allergies= allergies,
     patient.bloodtype= bloodtype,
-    patient.allergies= allergies
+    patient = encrypt(patient);
     patient = await patient.save();
     return patient;
   }
-  catch(err){ return null; }
+  catch(err){ console.log(err);return null; }
 }
 
 async function addTreatment(patient, treatmentid){
@@ -66,8 +79,11 @@ async function addTreatment(patient, treatmentid){
 }
 
 async function getPatient(patientId){
-  return await Patient.findById(patientId);
+  let patient = await Patient.findById(patientId);
+  return decrypt(patient);
 }
+
+
 
 
 exports.Patient = Patient; 
