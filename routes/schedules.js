@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { createSchedule, getSchedule, removeSchedule, getDaysMap, validate } = require("../models/schedule");
+const { createSchedule, getSchedule, removeSchedule, validate } = require("../models/schedule");
 
 router.post("/create", async (req, res) => {
     let result = validate(req.body.from, req.body.to, req.body.days, req.body.maxApppointment);
@@ -15,7 +15,7 @@ router.post("/create", async (req, res) => {
 router.get("/:scheduleid", async (req, res) => {
     let schedule = await getSchedule(req.params.scheduleid);
     if(!schedule) return res.status(404).send("Invalid objectid");
-console.log(schedule);
+    console.log(schedule);
     return res.send(schedule);
 })
 
