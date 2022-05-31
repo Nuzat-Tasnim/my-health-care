@@ -17,7 +17,7 @@ router.get("/:scheduleid", async (req, res) => {
     if(!schedule) return res.status(404).send("Invalid objectid");
     console.log(schedule);
     return res.send(schedule);
-})
+});
 
 router.delete("/remove/:scheduleid", async (req, res) => {
     let schedule = await getSchedule(req.params.scheduleid);
@@ -27,7 +27,7 @@ router.delete("/remove/:scheduleid", async (req, res) => {
     if(!schedule) return res.status(500).send("Something went wrong! Please try again later.");
 
     return res.send(schedule);
-})
+});
 
 module.exports = router; 
 
