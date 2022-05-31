@@ -25,7 +25,7 @@ const app = express();
 const cloudDBUrl = "mongodb+srv://nuzattasnim:turnaDB28@cluster0.mjmvr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const localDBUrl = "mongodb://localhost:27017/bloodFeed";
 
-mongoose.connect(localDBUrl)
+mongoose.connect(cloudDBUrl)
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
