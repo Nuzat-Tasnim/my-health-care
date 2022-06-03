@@ -43,7 +43,7 @@ router.delete("/removeuser", async (req, res) => {
     
     if(!result) return res.status(500).send("Something went wrong! PLease try again later.");
     
-    res.send(user);
+    return res.send(user);
 });
 
 
