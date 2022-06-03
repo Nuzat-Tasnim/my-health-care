@@ -23,7 +23,6 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Doctor"
   }]
-  
 }));
 
 function encrypt(patient){
