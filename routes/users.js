@@ -46,6 +46,5 @@ router.delete("/removeuser", async (req, res) => {
     return res.send(user);
 });
 
-
 module.exports = router; 
 
