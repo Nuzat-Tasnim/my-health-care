@@ -30,6 +30,15 @@ mongoose.connect(cloudDBUrl)
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
 app.use(express.json());
+
+app.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
+
 app.use('/auth', auth);
 app.use('/admins', admins);
 app.use('/posts', posts);
