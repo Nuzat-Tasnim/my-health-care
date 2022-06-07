@@ -10,7 +10,7 @@ router.get("/login", async (req, res) => {
     if(!user) return res.status(401).send("Wrong Credentials!");
     
     const token = user.generateAuthToken();
-    res.send(token);
+    res.header("x-auth-token", token).send(user);
 });
 
 router.get("/refreshToken", async(req, res) => {
@@ -26,7 +26,7 @@ router.post("/register", async (req, res) => {
     let user = await User.findOne({email: req.body.email});
     if(user) return res.status(400).send('User already registered.');
 
-    user = await createUser(req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact, req.body.email, req.body.password);
+    user = await createUser(req.body.name, req.body.gender, req.body.birthdate, req.body.email, req.body.password);
     // res.send(user);
 
     const token = user.generateAuthToken();

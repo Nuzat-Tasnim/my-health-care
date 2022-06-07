@@ -70,7 +70,7 @@ function validate(user) {
   return x;
 }
 
-async function createUser(name, gender, birthdate, address, contact, email, password){
+async function createUser(name, gender, birthdate, email, password){
   let date = new Date(birthdate);
 
   let user = new User({
@@ -78,8 +78,8 @@ async function createUser(name, gender, birthdate, address, contact, email, pass
     gender: gender,
     birthdate: date,
     age: getAge(date),
-    address: address,
-    contact: contact,
+    address: "",
+    contact: "",
     email: email,
     password: hash(password),
     doctorid: null,
