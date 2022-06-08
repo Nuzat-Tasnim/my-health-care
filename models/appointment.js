@@ -89,6 +89,7 @@ async function validate(doctor, patientid, date){
     else return false;
 }
 
+
 // // for doctor, to search My Appointments
 // async function getAppointmentByDoctorId(doctorid){
 //   try{
