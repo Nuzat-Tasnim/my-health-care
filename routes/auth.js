@@ -33,5 +33,4 @@ router.post("/register", async (req, res) => {
     res.header("x-auth-token", token).send(user);
 }); 
 
-
 module.exports = router; 
