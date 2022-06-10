@@ -30,6 +30,18 @@ router.delete("/admin/deleteAll", async (req, res) => {
     res.send(result);
 });
 
+router.post("/patient/create", async (req, res) => {
+    let patients = req.body.patients;
+    let result = await Patient.insertMany(patients);
+    console.log(result);
+    res.send(result);
+});
+
+router.delete("/patient/deleteAll", async (req, res) => {
+    let result = await Patient.deleteMany({});
+    res.send(result);
+});
+
 router.post("/admin/create", async (req, res) => {
     let admins = req.body.admins;
     let result = await Admin.insertMany(admins);
