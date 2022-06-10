@@ -13,6 +13,7 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
   },
   bloodtype: { type: String },
   allergies: { type: String },
+  medicalHistories: { type: String },
   treatments: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -28,7 +29,8 @@ const Patient = mongoose.model('Patient', new mongoose.Schema({
 function encrypt(patient){
   patient.bloodtype = encryptString(patient.bloodtype);
   patient.allergies = encryptString(patient.allergies);
-  return patient
+  patient.medicalHistories = encryptString(patient.medicalHistories);
+  return patient;
 }
 function decrypt(patient){
   patient.bloodtype = decryptString(patient.bloodtype);
@@ -42,6 +44,7 @@ async function createPatient(user){
       userid: user._id,
       bloodtype: "",
       allergies: "",
+      medicalHistories: "",
       treatments: []
     });
     patient = await patient.save();
@@ -54,11 +57,12 @@ async function createPatient(user){
     return null; }
 }
 
-async function updateProfile(patient, bloodtype, allergies){
+async function updateProfile(patient, bloodtype, allergies, medicalHistories){
   try{
     
-    patient.allergies= allergies,
-    patient.bloodtype= bloodtype,
+    patient.allergies= allergies;
+    patient.bloodtype= bloodtype;
+    patient.medicalHistories = medicalHistories;
     patient = encrypt(patient);
     patient = await patient.save();
     return patient;

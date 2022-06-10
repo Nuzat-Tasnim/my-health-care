@@ -30,7 +30,7 @@ router.put("/update/:patientid", auth, async(req, res) => {
     let patient = await getPatient(req.params.patientid);
     if(!patient) return res.status(404).send("User not found.");
 
-    patient = await updateProfile(patient, req.body.bloodtype, req.body.allergies);
+    patient = await updateProfile(patient, req.body.bloodtype, req.body.allergies, req.body.medicalHistories);
     if(!patient) return res.status(500).send("Something went wrong! PLease try again later.");
     
     res.send(patient);
