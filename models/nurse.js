@@ -14,7 +14,12 @@ const Nurse = mongoose.model('Nurse', new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "Patient"
     }
-  ]
+  ],
+  approvedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admin"
+  }
+
   
 }));
 
