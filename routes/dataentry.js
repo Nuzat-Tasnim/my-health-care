@@ -5,6 +5,7 @@ const {User} = require("../models/user");
 const {Admin} = require("../models/admin");
 const {Nurse} = require("../models/nurse");
 const {Doctor} = require("../models/doctor");
+const {Patient} = require("../models/patient")
 
 const {Review} = require("../models/review");
 const {Post} = require("../models/post");
