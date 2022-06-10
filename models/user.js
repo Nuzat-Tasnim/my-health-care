@@ -5,17 +5,11 @@ const config = require("config");
 const mongoose = require('mongoose');
 const { hash } = require("../cryptoJS/aes");
 const res = require('express/lib/response');
-const { query } = require('express');
-const { has } = require('config');
-
 
 const userSchema = new mongoose.Schema({
   name: { type: String },
   gender: { type: String },
-  birthdate: {
-      type: Date,
-      required: true,
-  },
+  birthdate: { type: Date  },
   age: { type: Number },
   address: { type: String },
   contact: { type: String },
@@ -71,6 +65,7 @@ function validate(user) {
 }
 
 async function createUser(name, gender, birthdate, email, password){
+  if(birthdate.includes("/")) birthdate = birthdate.replace(/\//g, "-");
   let date = new Date(birthdate);
 
   let user = new User({
@@ -103,6 +98,9 @@ async function login(email, password){
 
 
 async function editUser(user, name, gender, birthdate, address, contact){
+  if(birthdate.includes("/")) birthdate = birthdate.replace(/\//g, "-");
+  birthdate = new Date(birthdate);
+
   user.name = name;
   user.gender = gender;
   user.birthdate = new Date(birthdate);
@@ -168,16 +166,27 @@ async function getUserById(userid) {
 
 async function searchUser(name, category){
   const categories = ['doctor','nurse','patient'];
-  if(category in categories === false) res.status(400).send("Bad request.");
+  if(!categories.includes(category)) return null;
+  category+="id";
   
   let idKey = category+"id";
   let users = await User.find({
       [idKey]: {$ne : null},
-      "name": { $regex: name, $options: "i" } 
-  });
+      "name": { $regex: name, $options: "i"}
+    })
+    .populate(category, {
+      select: {},
+      match: {"approvedBy": {$ne: null}}
+    })
+    .exec((err, user) =>{
+      if(err){
+         console.log(err)
+      }else{
+         console.log(user)
+      }
+   });
   
   return users;
-  
 }
 
 async function removeUser(user) {
@@ -202,6 +211,38 @@ function getAge(birthDate) {
   return age;
 }
 
+async function searchNotAllUsers(name){
+// 
+// 
+// do the assigning doctorid only after admin approves
+//  
+// 
+
+  let query = {
+    $and: [
+      {"name": new RegExp('.*'+name+'.*', 'i')},
+      {
+        $or: [
+          { doctorid: {$ne: null} },
+          { nurseid: {$ne: null} }
+        ]
+      }
+    ]
+  };
+
+  let users = await User.find(query);
+
+  return users;
+}
+
+async function searchAllUsers(name){
+  let query = {"name": new RegExp('.*'+name+'.*', 'i')};
+  let users = await User.find(query).select( "name").select("roles");
+  return users;
+}
+
+
+
 exports.User = User; 
 exports.createUser = createUser;
 exports.validate = validate;
@@ -212,3 +253,7 @@ exports.searchUser = searchUser;
 exports.getUsers = getUsers
 exports.getUserById = getUserById
 exports.removeUser = removeUser
+
+
+exports.searchNotAllUsers = searchNotAllUsers;
+exports.searchAllUsers = searchAllUsers;

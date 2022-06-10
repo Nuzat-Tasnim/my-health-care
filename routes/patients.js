@@ -8,8 +8,6 @@ const { getNurseById } = require("../models/nurse");
 const { getAppointmentByQuery } = require("../models/appointment");
 const { createPatient, updateProfile, addTreatment, getPatient } = require("../models/patient");
 
-
-
 router.put("/update/:patientid", auth, async(req, res) => {
 
     let condition2 = req.user.roles.includes("Doctor");
@@ -42,6 +40,8 @@ router.post("/create", auth, async (req, res) => {
 
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
+
+    // maxApppointmentconditions not yet checked
 
     patient = await createPatient(user);
     if(!patient) return res.status(500).send("Something went wrong! Please try again later.");
@@ -90,7 +90,7 @@ router.get("/:patientid", auth, async(req, res) => {
 router.get("/plotdata/:patientid", async(req, res) => {
     let result = await getPlotValues(req.params.patientid);
     return res.send(result);
-})
+});
 
 
 module.exports = router; 

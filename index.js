@@ -11,7 +11,7 @@ const schedules = require('./routes/schedules');
 const appointments = require('./routes/appointments');
 const posts = require('./routes/posts');
 
-// const dataentry = require('./routes/dataentry');
+const dataentry = require('./routes/dataentry');
 
 
 if(!config.get("jwtPrivateKey")){
@@ -25,7 +25,7 @@ const app = express();
 const cloudDBUrl = "mongodb+srv://nuzattasnim:turnaDB28@cluster0.mjmvr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 const localDBUrl = "mongodb://localhost:27017/bloodFeed";
 
-mongoose.connect(cloudDBUrl)
+mongoose.connect(localDBUrl)
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
@@ -49,7 +49,7 @@ app.use('/doctors', doctors);
 app.use('/nurses', nurses);
 app.use("/schedules",schedules);
 app.use('/appointments', appointments);
-// app.use('/dataentry', dataentry);
+app.use('/dataentry', dataentry);
 
 
 const port = process.env.PORT || 3000;

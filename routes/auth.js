@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const auth = require("../middleware/auth");
+const {User, getUserById, validate, createUser, login} = require("../models/user");
 
-const {User, validate, createUser, login} = require("../models/user");
 
-
-router.get("/login", async (req, res) => {
+router.post("/login", async (req, res) => {
     // console.log(req.body.email, req.body.password);
     let user = await login(req.body.email, req.body.password);
     if(!user) return res.status(401).send("Wrong Credentials!");
@@ -13,7 +13,8 @@ router.get("/login", async (req, res) => {
     res.header("x-auth-token", token).send(user);
 });
 
-router.get("/refreshToken", async(req, res) => {
+router.get("/refreshToken", auth, async(req, res) => {
+    let user = await getUserById(req.user._id);
     const token = user.generateAuthToken();
     res.send(token);
 })

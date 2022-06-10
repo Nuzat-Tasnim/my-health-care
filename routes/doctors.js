@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
-const { getUserById } = require("../models/user");
+const { getUserById, searchAllUsers } = require("../models/user");
 const { createReview } = require("../models/review");
 const { getPatient } = require("../models/patient");
-const { getDoctor, getDoctorByName, createDoctor, addSchedule} = require("../models/doctor");
+const { getDoctor, searchDoctor, createDoctor, addSchedule, approveDoctor, getUnapprovedDoctorList} = require("../models/doctor");
 
-router.get("/search", async (req, res) => {
-    let doctors = await getDoctorByName(req.body.name);
+router.post("/search", async (req, res) => {
+    // let doctors = await getDoctorByName(req.body.name);
+    let doctors = await searchAllUsers(req.body.name);
+
     res.send(doctors);
 });
 
@@ -16,18 +18,11 @@ router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
-
     let doctor = await createDoctor(user, req.body.userid, req.body.areaOfExpertise);
     if(!doctor) return res.status(500).send("Something went wrong! PLease try again later.");
     return res.send(doctor);
 });
 
-router.get("/:doctorid", async (req, res) => {
-    let doctor = await getDoctor(req.params.doctorid);
-    if(!doctor) return res.status(404).send("User not found.");
-    res.send(doctor);
-});
 
 router.post("/rate/:doctorid", auth, async (req, res) => {
 
@@ -56,5 +51,34 @@ router.post("/addSchedule", auth, async (req, res) => {
     if(!schedule) return res.status(500).send("Something went wrong! PLease try again later.");
     return res.send(schedule);
 });
+
+router.get("/unapproved", auth, async (req, res) => {
+
+    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
+
+    let doctorList = await getUnapprovedDoctorList();
+    return res.send(doctorList) ;
+
+});
+
+router.put("/approve", auth, async (req, res) => {
+    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
+
+    let doctor = await getDoctor(req.body.doctorid);
+    if(!doctor) return res.status(404).send("User not found.");
+
+    doctor = await approveDoctor(doctor, req.user.adminid);
+    if(!doctor) return res.status(500).send("Something went wrong! PLease try again later.");
+
+    return res.send(doctor);
+
+});
+
+router.get("/:doctorid", auth, async (req, res) => {
+    let doctor = await getDoctor(req.params.doctorid);
+    if(!doctor) return res.status(404).send("User not found.");
+    res.send(doctor);
+});
+
 
 module.exports = router; 

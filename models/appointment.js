@@ -24,6 +24,8 @@ const Appointment = mongoose.model('Appointment', new mongoose.Schema({
 }));
 
 async function createAppointment(doctorid, patientid, date){
+
+  if(date.includes("/")) date = date.replace(/\//g, "-");
   let count = 1;
   try{
     count += await Appointment.count({"doctor": doctorid, "date": date});

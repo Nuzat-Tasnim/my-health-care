@@ -11,7 +11,8 @@ const Treatment = mongoose.model('Treatment', new mongoose.Schema({
   prescription: { type: String },
   duration: { type: String },
   weight: { type: Number },
-  pressure: { type: Number },
+  pressureHigh: { type: Number },
+  pressureLow: { type: Number },
   sugarLevel: { type: Number },
   date: { type: Date },
   nurseAssigned: [
@@ -31,7 +32,6 @@ function encrypt(treatment){
   return treatment;
 }
 function decrypt(treatment){
-  console.log("here first-----",treatment)
   treatment.symptom = decryptString(treatment.symptom);
   treatment.assessment = decryptString(treatment.assessment);
   treatment.prescription = decryptString(treatment.prescription);
@@ -40,14 +40,15 @@ function decrypt(treatment){
 }
 
 
-async function createTreatment(symptom, assessment, prescription, duration, weight, pressure, sugarLevel){
+async function createTreatment(symptom, assessment, prescription, duration, weight, pressureHigh, pressureLow, sugarLevel){
   let treatment = new Treatment({
     symptom: symptom,
     assessment: assessment,
     prescription: prescription,
     duration: duration,
     weight: weight,
-    pressure: pressure,
+    pressureHigh: pressureHigh,
+    pressureLow: pressureLow,
     sugarLevel: sugarLevel,
     date: new Date()
   });
@@ -55,17 +56,6 @@ async function createTreatment(symptom, assessment, prescription, duration, weig
   treatment = await treatment.save();
   return treatment;
 }
-
-// async function getTreatments(patientid){
-//   try{
-//     let treatments = await Treatment.find({"patientid": patientid}).sort("date")
-//     for(let i=0;i<treatments.length;i++){
-//       treatments[i] = decrypt(treatments[i]);
-//     }
-//     return treatments; 
-//   }
-//   catch(err){ return null; }
-// }
 
 async function getTreatment(treatmentId){
   let treatment = await Treatment.findById(treatmentId)
@@ -94,30 +84,15 @@ async function getPlotValues(patientid){
     let treatment = treatments[i];
     treatment = await getTreatment(treatment);
     treatment = decrypt(treatment);
-    console.log("here??????");
     let value = {
       date: treatment.date,
       weight: treatment.weight,
-      pressure: treatment.pressure,
+      pressureHigh: treatment.pressureHigh,
+      pressureLow: treatment.pressureLow,
       sugarLevel: treatment.sugarLevel
     }
     values.push(value);
   }
-
- 
-
-  // let values = [];
-  // treatments.forEach(treatment => {
-  //   treatment = decrypt(treatment);
-  //   let value = {
-  //     date: treatment.date,
-  //     weight: treatment.weight,
-  //     pressure: treatment.pressure,
-  //     sugarLevel: treatment.sugarLevel
-  //   }
-  //   values.push(value);
-  // });
-  console.log("vaiya",values);
   return values;
 }
 

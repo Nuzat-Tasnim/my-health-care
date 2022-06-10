@@ -27,15 +27,33 @@ async function createAdmin(user){
   }
 };
 
+async function approveAdmin(admin, adminid){
+  admin.approvedBy = adminid;
+  let user = await getUserById(admin.userid);
+  user = await addRoles(user, "Admin", admin._id, "adminid");
+  if(!user) return null;
+
+  try{
+    admin = await admin.save(); 
+    return admin;
+  }
+  catch(err){
+    console.log(err);
+    return null;
+  }
+}
+
+async function getUnapprovedAdminList(){
+  let adminList = await Admin.find({approvedBy: { $eq: null }});
+  return adminList;
+}
+
 async function getAdmin(adminid){
   let admin = await Admin.findById(adminid);
   return admin;
 }
 
 async function logEntry(text, admin){
-  // let d = new Date();
-  // let date = d.toString();
-  // text = text + "\t" + date;
   text += "\t"+ new Date().toString();
   admin.log.push(text);
   admin = await admin.save()
@@ -49,6 +67,8 @@ async function logs(adminid){
 
 exports.createAdmin = createAdmin
 exports.getAdmin = getAdmin;
+exports.approveAdmin = approveAdmin;
+exports.getUnapprovedAdminList = getUnapprovedAdminList;
 exports.logEntry = logEntry;
 exports.logs = logs;
 

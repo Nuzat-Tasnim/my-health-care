@@ -1,3 +1,16 @@
+Date.prototype.addDays = function(days) {
+  var date = new Date(this.valueOf());
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
+var date = new Date();
+
+console.log(date.addDays(5));
+
+
+
+
 // // String.prototype.hashCode = function() {
 // //     var hash = 0, i, chr;
 // //     if (this.length === 0) return hash;
@@ -71,13 +84,13 @@
 
 
 
-// reminderrrrrrr!!
-const schedule = require('node-schedule');
-const date = new Date("2022-05-27T08:27:00.000Z");
+// // reminderrrrrrr!!
+// const schedule = require('node-schedule');
+// const date = new Date("2022-05-27T08:27:00.000Z");
 
-const job = schedule.scheduleJob(date, function(){
-  console.log('The world is going to end today.');
-});
+// const job = schedule.scheduleJob(date, function(){
+//   console.log('The world is going to end today.');
+// });
 
 
 
@@ -143,4 +156,4 @@ const job = schedule.scheduleJob(date, function(){
 
 
 
-console.log(new Date());
+// console.log(new Date());

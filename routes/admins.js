@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const { getUserById } = require("../models/user");
-const {createAdmin, getAdmin, logEntry, logs} = require("../models/admin");
+const {createAdmin, getAdmin, approveAdmin, getUnapprovedAdminList, logEntry, logs} = require("../models/admin");
 
 router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);
@@ -14,7 +14,29 @@ router.post("/create", auth, async (req, res) => {
     res.send(admin);
 });
 
-router.get("/logEntry", async (req, res) => {
+router.get("/unapproved", auth, async (req, res) => {
+
+    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
+
+    let adminList = await getUnapprovedAdminList();
+    return res.send(adminList) ;
+
+});
+
+router.put("/approve", auth, async (req, res) => {
+    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
+
+    let admin = await getAdmin(req.body.adminid);
+    if(!admin) return res.status(404).send("User not found.");
+
+    admin = await approveAdmin(admin, req.user.adminid);
+    if(!admin) return res.status(500).send("Something went wrong! PLease try again later.");
+
+    return res.send(admin);
+
+});
+
+router.post("/logEntry", async (req, res) => {
     let admin = await getAdmin(req.body.adminid);
     if(!admin) return res.status(404).send("User not found.");
 
@@ -23,7 +45,7 @@ router.get("/logEntry", async (req, res) => {
     res.send(admin);
 });
 
-router.get("/logs/:adminid", async (req, res) => {
+router.post("/logs/:adminid", async (req, res) => {
     let admin = await getAdmin(req.body.adminid);
     if(!admin) return res.status(404).send("User not found.");
 

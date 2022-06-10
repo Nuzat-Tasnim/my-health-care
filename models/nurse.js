@@ -2,7 +2,7 @@ const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
-const { searchUser, addRoles } = require("../models/user");
+const { getUserById ,searchUser, addRoles } = require("../models/user");
 
 const Nurse = mongoose.model('Nurse', new mongoose.Schema({
   userid: {
@@ -20,15 +20,33 @@ const Nurse = mongoose.model('Nurse', new mongoose.Schema({
 
 async function createNurse(user){
   try{
-    let nurse = new Nurse({userid: user._id});
+    let nurse = new Nurse({userid: user._id, approvedBy: null});
     nurse = await nurse.save();
-
-    user = await addRoles(user, "Nurse", nurse._id, "nurseid");
-    if(!user) return null;
 
     return nurse;
   }
   catch(err){ return null; }
+}
+
+async function approveNurse(nurse, adminid){
+  nurse.approvedBy = adminid;
+  let user = await getUserById(nurse.userid);
+  user = await addRoles(user, "Nurse", nurse._id, "nurseid");
+  if(!user) return null;
+
+  try{
+    nurse = await nurse.save(); 
+    return nurse;
+  }
+  catch(err){
+    console.log(err);
+    return null;
+  }
+}
+
+async function getUnapprovedNurseList(){
+  let nurseList = await Nurse.find({approvedBy: { $eq: null }});
+  return nurseList;
 }
 
 async function getNurseById(nurseid){
@@ -55,4 +73,6 @@ exports.Nurse = Nurse;
 exports.createNurse = createNurse;
 exports.getNurseById = getNurseById;
 exports.assignPatient = assignPatient;
+exports.approveNurse = approveNurse;
+exports.getUnapprovedNurseList = getUnapprovedNurseList;
 exports.getNurseByName = getNurseByName
