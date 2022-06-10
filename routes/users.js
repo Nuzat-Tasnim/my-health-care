@@ -25,7 +25,13 @@ router.get("/:userid", auth, async (req, res) => {
     let user = await getUserById(req.params.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    if(!(req.user.roles.includes("Admin"))  || (req.user._id != req.params.userid)) return res.status(403).send("Forbidden.");
+    let condition1 = req.user.roles.includes("Admin");
+    let condition2 = req.user.roles.includes("Doctor");
+    let condition3 = req.user.roles.includes("Nurse");
+    let condition4 =  req.params.userid === req.user._id;
+    
+
+    if(!condition1 && !condition2 && !condition3 && !condition4) return res.status(403).send("Forbidden");
 
     return res.send(user);
 });
