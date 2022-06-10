@@ -44,7 +44,7 @@ router.delete("/doctor/deleteAll", async (req, res) => {
 
 router.post("/doctor/create", async (req, res) => {
     let doctors = req.body.doctors;
-    let result = await Doctor.insertMany(nurses);
+    let result = await Doctor.insertMany(doctors);
     console.log(result);
     res.send(result);
 });

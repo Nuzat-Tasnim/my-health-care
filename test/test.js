@@ -80,7 +80,7 @@ console.log(date.addDays(5));
 
 // encryption("hello");
 
-// console.log(CryptoJS.SHA256("Message").toString());
+// console.log(CryptoJS.SHA256("password").toString());
 
 
 
@@ -157,3 +157,331 @@ console.log(date.addDays(5));
 
 
 // console.log(new Date());
+
+
+
+
+
+
+// {
+//   "users": [
+//       {
+//           "name": "admin",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "admin@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "doctor",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "doctor@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "doctor2",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "doctor2@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "doctor3",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "doctor3@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "doctor4",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "doctor4@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "doctor5",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "doctor5@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "nurse",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "nurse@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "nurse2",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "nurse2@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "nurse3",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "nurse3@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+//       },
+//       {
+//           "name": "patient",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "patient@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "patient2",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "patient2@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8"
+//       },
+//       {
+//           "name": "patient3",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "patient@3gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "patient4",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "patient4@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user2",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user2@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user3",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user3@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user4",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user4@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user5",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user5@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user6",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user6@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user7",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user7@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user8",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user8@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user9",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user9@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       },
+//       {
+//           "name": "user1",
+//           "gender": "male",
+//           "birthdate": "2008-08-08",
+//           "address": "ctg",
+//           "contact": "01738456774",
+//           "email": "user1@gmail.com",
+//           "password": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+//           "doctorid": null,
+//           "nurseid": null,
+//           "patientid": null,
+//           "adminid": null
+//       }
+
+//   ]
+// }
+
+
+// {
+//   "doctors": [
+//       {
+//           "userid": "62a3a718ad58ceafa2bc0269",
+//           "areaOfExpertise": "mental",
+//           "approvedBy": null
+//       },
+//       {
+//           "userid": "62a3a718ad58ceafa2bc026a",
+//           "areaOfExpertise": "hair",
+//           "approvedBy": null
+//       },
+//       {
+//           "userid": "62a3a718ad58ceafa2bc026b",
+//           "areaOfExpertise": "heart",
+//           "approvedBy": null
+//       },
+//       {
+//           "userid": "62a3a718ad58ceafa2bc026c",
+//           "areaOfExpertise": "bone",
+//           "approvedBy": null
+//       }
+//   ]
+// }
