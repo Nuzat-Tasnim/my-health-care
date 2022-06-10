@@ -40,7 +40,7 @@ router.get("/unapproved", auth, async (req, res) => {
     if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
 
     let nurseList = await getUnapprovedNurseList();
-    return nurseList;
+    return res.send(nurseList);
 
 });
 
@@ -53,7 +53,7 @@ router.put("/approve", auth, async (req, res) => {
     nurse = await approveNurse(nurse, req.user.adminid);
     if(!nurse) return res.status(500).send("Something went wrong! PLease try again later.");
     
-    return nurse;
+    return res.send(nurse);
 });
 
 router.get("/:nurseid", auth, async (req, res) => {
