@@ -3,6 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const { getUserById } = require("../models/user");
 const { getPatient } = require("../models/patient");
+const { getAppointmentByQuery } = require("../models/appointment");
 const {createNurse, getUnapprovedNurseList, approveNurse, getNurseById, assignPatient, getNamedList, getNurseByName} = require("../models/nurse");
 
 
