@@ -15,7 +15,7 @@ router.post("/assignPatient", auth, async (req, res) => {
     let appointments = await getAppointmentByQuery(query);
     if(!appointments) return res.status(403).send("Forbidden");
 
-    let nurse = getNurseById(req.body.nurseid);
+    let nurse = await getNurseById(req.body.nurseid);
     if(!nurse) return res.status(404).send("User not found.");
 
     let patient = await getPatient(req.body.patientid);
