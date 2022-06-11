@@ -21,7 +21,7 @@ router.post("/set", auth, async(req, res) => {
     let valid = await validate(doctor, patientid, req.body.date);
     if(valid === false)  return res.status(400).send("Please choose another date for appointment.");
 
-    if(valid ===  null) return res.status(500).send("Something went wrong! PLease try again later.");
+    if(valid === null) return res.status(500).send("Something went wrong! PLease try again later.");
 
     if(valid){
         let appointment = await createAppointment(req.body.doctorid,patientid, req.body.date);

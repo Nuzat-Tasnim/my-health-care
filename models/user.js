@@ -51,12 +51,12 @@ const User = mongoose.model('User', userSchema);
 
 function validate(user) {
   const schema = Joi.object({
-    name: Joi.string().min(2).max(50).required(),
-    gender: Joi.string().min(4).max(15).required(),
+    name: Joi.string().required(),
+    gender: Joi.string().required(),
     birthdate: Joi.date(),
     address: Joi.string(),
-    contact: Joi.string().min(5).max(50),
-    email: Joi.string().email().min(6).max(60),
+    contact: Joi.string(),
+    email: Joi.string().email(),
     password: Joi.string()
   });
   let x = schema.validate(user, (err, value) => { console.log(err, value) });
@@ -242,7 +242,6 @@ async function searchAllUsers(name){
   let users = await User.find(query).select( "name").select("roles");
   return users;
 }
-
 
 
 exports.User = User; 

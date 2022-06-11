@@ -2,8 +2,10 @@ const express = require('express');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
+const { getUserById } = require("./user");
 const { getSchedule } = require("./schedule");
-const { Patient, getPatient } = require("./patient");
+const { getDoctor } = require("./doctor");
+const { getPatient } = require("./patient");
 
 const Appointment = mongoose.model('Appointment', new mongoose.Schema({
   doctor: {
@@ -14,12 +16,10 @@ const Appointment = mongoose.model('Appointment', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Patient"
   },
-  date: {
-    type: Date
-  },
-  serial: {
-    type: Number
-  }
+  doctorname: { type: String },
+  patientname: { type: String },
+  date: { type: Date },
+  serial: { type: Number }
   
 }));
 
@@ -31,11 +31,27 @@ async function createAppointment(doctorid, patientid, date){
     count += await Appointment.count({"doctor": doctorid, "date": date});
   }
   catch(err){ return null; }
+  let doctorname="", patientname = "";
+  try{
+    let doctor = await getDoctor(doctorid);
+    doctor = await getUserById(doctor.userid);
+    doctorname = doctor.name;
+
+    let patient = await getPatient(patientid);
+    patient = await getUserById(patient.userid);
+    patientname = patient.name;
+  }
+  catch(err){
+    console.log(err);
+    return null;
+  }
 
   try{
     let appointment = new Appointment({
       doctor: doctorid,
+      doctorname: doctorname,
       patient: patientid,
+      patientname: patientname,
       date: new Date(date),
       serial: count
     });
@@ -63,6 +79,7 @@ async function getAppointmentByQuery(query){
   try{
     let appointments = await Appointment.find(query);
     return appointments;
+
   }
   catch(err){ return null; }
 }
