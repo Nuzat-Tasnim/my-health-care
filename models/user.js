@@ -57,7 +57,7 @@ function validate(user) {
     address: Joi.string(),
     contact: Joi.string().min(5).max(50),
     email: Joi.string().email().min(6).max(60),
-    password: Joi.string().min(6).max(30)
+    password: Joi.string()
   });
   let x = schema.validate(user, (err, value) => { console.log(err, value) });
   console.log(x);
