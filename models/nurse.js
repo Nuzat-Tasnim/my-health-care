@@ -71,13 +71,13 @@ async function getNamedList(nurse){
   let namedList = [];
   let list = nurse.assignedTo;
   for(let patientid in list){
-    let patientname = await getPatient(patientid);
-    patientname = await getUserById(patientname.userid);
-    let patient = {
+    let patient = await getPatient(patientid);
+    patient = await getUserById(patient.userid);
+    let patientNew = {
       patientid: patientid,
-      patientname: patientname
+      patientname: patient.name
     }
-    namedList.push(patient);
+    namedList.push(patientNew);
   }
   return namedList;
 }
