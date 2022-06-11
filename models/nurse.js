@@ -80,7 +80,9 @@ async function getNamedList(nurse){
 }
 
 async function assignPatient(nurse, patientid){
-  console.log(nurse);
+  console.log(nurse.assignedTo);
+  nurse.assignedTo.push(patientid);
+  console.log(nurse.assignedTo);
   nurse.assignedTo.push(patientid);
   try{
     nurse = await nurse.save();
