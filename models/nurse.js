@@ -21,13 +21,12 @@ const Nurse = mongoose.model('Nurse', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Admin"
   }
-
   
 }));
 
 async function createNurse(user){
   try{
-    let nurse = new Nurse({userid: user._id, approvedBy: null});
+    let nurse = new Nurse({userid: user._id, assignedTo:[], approvedBy: null});
     nurse = await nurse.save();
 
     return nurse;
