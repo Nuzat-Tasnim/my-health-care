@@ -3,7 +3,7 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const { getUserById } = require("../models/user");
 const { getPatient } = require("../models/patient");
-const {createNurse, getUnapprovedNurseList, approveNurse, getNurseById, assignPatient, getNurseByName} = require("../models/nurse");
+const {createNurse, getUnapprovedNurseList, approveNurse, getNurseById, assignPatient, getNamedList, getNurseByName} = require("../models/nurse");
 
 router.post("/assignPatient", auth, async (req, res) => {
 
@@ -24,6 +24,14 @@ router.post("/assignPatient", auth, async (req, res) => {
 
     res.send(patient);
 });
+
+router.get("/assigndToMe", auth, async (req, res) => {
+    if(!req.user.roles.includes("nurse")) return res.status(400).send("Bad Request.");
+
+    let nurse = await getNurseById(req.user.nurseid);
+    let namedList = await getNamedList(nurse);
+    return res.send(namedList);
+})
 
 router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);

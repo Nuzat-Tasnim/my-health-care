@@ -1,8 +1,10 @@
 const express = require('express');
+const { func } = require('joi');
 const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const { getUserById ,searchUser, addRoles } = require("../models/user");
+const { getPatient } = require("../models/patient");
 
 const Nurse = mongoose.model('Nurse', new mongoose.Schema({
   userid: {
@@ -63,6 +65,21 @@ async function getNurseByName(name){
   return users;
 }
 
+async function getNamedList(nurse){
+  let namedList = [];
+  let list = nurse.assignedTo;
+  for(let patientid in list){
+    let patientname = await getPatient(patientid);
+    patientname = await getUserById(patient.userid);
+    let patient = {
+      patientid: patientid,
+      patientname: patientname
+    }
+    namedList.push(patient);
+  }
+  return namedList;
+}
+
 async function assignPatient(nurse, patientid){
   nurse.assignedTo.push(patientid);
   try{
@@ -81,3 +98,4 @@ exports.assignPatient = assignPatient;
 exports.approveNurse = approveNurse;
 exports.getUnapprovedNurseList = getUnapprovedNurseList;
 exports.getNurseByName = getNurseByName
+exports.getNamedList = getNamedList;
