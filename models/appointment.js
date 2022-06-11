@@ -72,7 +72,7 @@ async function createAppointment(doctorid, patientid, date){
 
 async function getAppointmentById(appointmentId){
   let appointment = await Appointment.findById(appointmentId);
-  return appointment
+  return appointment;
 }
 
 async function getAppointmentByQuery(query){
