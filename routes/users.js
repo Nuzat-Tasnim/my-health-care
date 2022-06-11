@@ -39,8 +39,6 @@ router.get("/:userid", auth, async (req, res) => {
 router.post("/editUser/:userid", auth, async (req, res) => {
     let user = await getUserById(req.params.userid);
 
-    if(!user) return res.status(404).send("User not found.");
-
     if(req.user._id != req.params.userid) return res.status(403).send("Forbidden.");
 
     user = editUser(user, req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact);

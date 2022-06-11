@@ -103,10 +103,10 @@ async function editUser(user, name, gender, birthdate, address, contact){
 
   user.name = name;
   user.gender = gender;
-  user.birthdate = new Date(birthdate);
+  user.birthdate = birthdate;
   user.address = address;
   user.contact = contact;
-
+console.log("1==", user);
   let {error} = validate({
     name: user.name,
     gender: user.gender,
@@ -119,6 +119,8 @@ async function editUser(user, name, gender, birthdate, address, contact){
   if(error) return error.details[0].message;
 
   try{
+
+    console.log("2==",user);
     user = await user.save();
     return user;
   }
