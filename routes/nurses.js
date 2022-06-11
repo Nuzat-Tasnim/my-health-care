@@ -21,6 +21,8 @@ router.post("/assignPatient", auth, async (req, res) => {
     let patient = await getPatient(req.body.patientid);
     if(!patient) return res.status(404).send("User not found.");
 
+    console.log("/assignPatient endpoint", nurse);
+
     patient = await assignPatient(nurse, req.body.patientid);
     if(!patient) return res.status(500).send("Something went wrong! PLease try again later.");
 
