@@ -5,6 +5,7 @@ const { getUserById } = require("../models/user");
 const { getPatient } = require("../models/patient");
 const {createNurse, getUnapprovedNurseList, approveNurse, getNurseById, assignPatient, getNamedList, getNurseByName} = require("../models/nurse");
 
+
 router.post("/assignPatient", auth, async (req, res) => {
 
     if(!(req.user.roles.includes("Doctor"))) return res.status(403).send("Forbidden");
