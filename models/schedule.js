@@ -1,15 +1,16 @@
 const mongoose = require('mongoose');
 
 const Schedule = mongoose.model('Schedule', new mongoose.Schema({
-    from: { type: Number },
-    to: { type: Number },
-    days: [{ type: String }],
+    from: { type: String },
+    to: { type: String },
+    days: [{ type: Number }],
     maxAppointment: { type: Number }
 }));
 
 async function createSchedule(from, to, days, maxAppointment){
 
-    let week = getWeekDays();
+    let week = ['sunday', 'monday','tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
+
     for (let i=0;i<days.length;i++){
         days[i]=week.indexOf(days[i]);
     }
@@ -60,18 +61,18 @@ function validate(from, to, days, maxAppointment){
     return true;
 }
 
-function getWeekDays(){
-    // const daysMap = new Map();
-    // daysMap.set('thursday', 0);
-    // daysMap.set('friday', 1);
-    // daysMap.set('saturday', 2);
-    // daysMap.set('sunday', 3);
-    // daysMap.set('monday', 4);
-    // daysMap.set('tuesday', 5);
-    // daysMap.set('wednesday', 6);
-    weekdays = ['sunday', 'monday','tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ]
-    return weekdays;
-}
+// function getWeekDays(){
+//     // const daysMap = new Map();
+//     // daysMap.set('thursday', 0);
+//     // daysMap.set('friday', 1);
+//     // daysMap.set('saturday', 2);
+//     // daysMap.set('sunday', 3);
+//     // daysMap.set('monday', 4);
+//     // daysMap.set('tuesday', 5);
+//     // daysMap.set('wednesday', 6);
+//     weekdays = ['sunday', 'monday','tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ]
+//     return weekdays;
+// }
 
 
 exports.Schedule = Schedule; 

@@ -4,9 +4,9 @@ Date.prototype.addDays = function(days) {
   return date;
 }
 
-var date = new Date();
+// var date = new Date();
 
-console.log(date.addDays(5));
+// console.log(date.addDays(5));
 
 
 
@@ -485,3 +485,7 @@ console.log(date.addDays(5));
 //       }
 //   ]
 // }
+let ar = [6,5,4];
+let date = new Date();
+date = date.getDay();
+console.log(date, typeof(date), ar.includes(date));
