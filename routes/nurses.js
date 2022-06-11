@@ -41,7 +41,6 @@ router.get("/unapproved", auth, async (req, res) => {
 
     let nurseList = await getUnapprovedNurseList();
     return res.send(nurseList);
-
 });
 
 router.put("/approve", auth, async (req, res) => {
