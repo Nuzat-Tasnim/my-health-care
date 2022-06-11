@@ -93,7 +93,6 @@ async function assignPatient(nurse, patientid){
 }
 
 
-
 exports.Nurse = Nurse; 
 exports.createNurse = createNurse;
 exports.getNurseById = getNurseById;
