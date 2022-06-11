@@ -79,6 +79,7 @@ async function validate(doctor, patientid, date){
 
     try{
       let appointment = await Appointment.findOne({"doctor": doctor._id, "patient": patientid, "date": date});
+      console.log("findOne - ",appointment);
       if(appointment) return false;
     }
     catch(err){ return null; }
@@ -86,6 +87,7 @@ async function validate(doctor, patientid, date){
     let appointmentsTaken=0;
     try{
       appointmentsTaken = await Appointment.count({"doctor": doctor._id, "date": date});
+      console.log("appointmentsTaken ", appointmentsTaken);
     }
     catch(err){ return null; }
 
