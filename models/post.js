@@ -40,7 +40,7 @@ async function createPost(username, bloodType, text, contact){
 }
 
 async function getPosts() {
-  let posts = await Post.find().sort("date");
+  let posts = await Post.find().sort({ "date": 'descending' });
   return posts;
 }
 
