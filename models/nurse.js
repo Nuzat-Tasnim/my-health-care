@@ -56,7 +56,8 @@ async function getUnapprovedNurseList(){
 }
 
 async function getNurseById(nurseid){
-  return await Nurse.findById(nurseid);
+  let nurse = await Nurse.findById(nurseid);
+  return nurse;
 }
 
 async function getNurseByName(name){  
