@@ -78,7 +78,7 @@ async function validate(doctor, patientid, date){
     if(!result) return false;
 
     try{
-      let appointment = await Appointment.findOne({"doctor": doctor._id, "patient": patientid});
+      let appointment = await Appointment.findOne({"doctor": doctor._id, "patient": patientid, "date": date});
       if(appointment) return false;
     }
     catch(err){ return null; }
