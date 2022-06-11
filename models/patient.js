@@ -35,6 +35,8 @@ function encrypt(patient){
 function decrypt(patient){
   patient.bloodtype = decryptString(patient.bloodtype);
   patient.allergies = decryptString(patient.allergies);
+  patient.medicalHistories = decryptString(patient.medicalHistories);
+
   return patient
 }
 
@@ -82,7 +84,9 @@ async function addTreatment(patient, treatmentid){
 }
 
 async function getPatient(patientId){
+  console.log("inside",patientId);
   let patient = await Patient.findById(patientId);
+  console.log("but", patient);
   return decrypt(patient);
 }
 
