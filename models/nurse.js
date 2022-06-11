@@ -70,13 +70,17 @@ async function getNamedList(nurse){
   console.log("inside named list", nurse.assignedTo);
   let namedList = [];
   let list = nurse.assignedTo;
+
   for(let patientid in list){
     let patient = await getPatient(patientid);
+    console.log("one",patient);
     patient = await getUserById(patient.userid);
+    console.log("two",patient);
     let patientNew = {
       patientid: patientid,
       patientname: patient.name
     }
+    console.log("three",patientNew);
     namedList.push(patientNew);
   }
   return namedList;

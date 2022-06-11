@@ -489,3 +489,18 @@ let ar = [6,5,4];
 let date = new Date();
 date = date.getDay();
 console.log(date, typeof(date), ar.includes(date));
+
+let namedList = [];
+let patientid = 1;
+let patientname = "a"
+for (let i = 0;i<3;i++){
+  let patientNew = {
+    patientid: patientid,
+    patientname: patientname
+  }
+  namedList.push(patientNew);
+  patientid+=1;
+  patientname+="a";
+}
+console.log("list",namedList);
+
