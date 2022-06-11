@@ -68,6 +68,8 @@ async function getAppointmentByQuery(query){
 }
 
 async function validate(doctor, patientid, date){
+    if(date.includes("/")) date = date.replace(/\//g, "-");
+
     date = new Date(date);
     doctorSchedule = await getSchedule(doctor.schedule);
 
