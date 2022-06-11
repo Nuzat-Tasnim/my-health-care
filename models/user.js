@@ -53,7 +53,7 @@ function validate(user) {
   const schema = Joi.object({
     name: Joi.string().min(2).max(50).required(),
     gender: Joi.string().min(4).max(15).required(),
-    birthdate: Joi.string(),
+    birthdate: Joi.date(),
     address: Joi.string(),
     contact: Joi.string().min(5).max(50),
     email: Joi.string().email().min(6).max(60),
