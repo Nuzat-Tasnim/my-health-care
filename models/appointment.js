@@ -72,7 +72,7 @@ async function validate(doctor, patientid, date){
     doctorSchedule = await getSchedule(doctor.schedule);
 
     let result = doctorSchedule.days.includes(date.getDay());
-    console.log("inckudes", date.getDay());
+    console.log("includes", date.getDay());
     if(!result) return false;
 
     try{
