@@ -67,6 +67,7 @@ router.put("/approve", auth, async (req, res) => {
     return res.send(nurse);
 });
 
+
 router.get("/:nurseid", auth, async (req, res) => {
     let nurse = await getNurseById(req.params.nurseid);
     if(!nurse) return res.status(404).send("User not found.");
