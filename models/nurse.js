@@ -57,6 +57,7 @@ async function getUnapprovedNurseList(){
 
 async function getNurseById(nurseid){
   let nurse = await Nurse.findById(nurseid);
+  console.log(nurse);
   return nurse;
 }
 
@@ -66,6 +67,7 @@ async function getNurseByName(name){
 }
 
 async function getNamedList(nurse){
+  console.log("inside named list", nurse.assignedTo);
   let namedList = [];
   let list = nurse.assignedTo;
   for(let patientid in list){
