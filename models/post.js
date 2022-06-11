@@ -3,6 +3,10 @@ const Joi = require('joi');
 const mongoose = require('mongoose');
 
 const Post = mongoose.model('Post', new mongoose.Schema({
+  userid: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
   username: {
     type: String,
     required: true
@@ -24,9 +28,10 @@ const Post = mongoose.model('Post', new mongoose.Schema({
   
 }));
 
-async function createPost(username, bloodType, text, contact){
+async function createPost(userid, username, bloodType, text, contact){
   try{
     let post = new Post({
+      userid: userid,
       username: username,
       bloodtype: bloodType,
       text: text,
@@ -49,8 +54,14 @@ async function getPost(postId){
   return post;
 }
 
+async function removePost(post){
+  let result = await post.remove();
+  return result;
+}
+
 
 exports.Post = Post; 
 exports.createPost = createPost;
 exports.getPost = getPost;
 exports.getPosts = getPosts;
+exports.removePost = removePost;
