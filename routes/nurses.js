@@ -30,7 +30,7 @@ router.post("/assignPatient", auth, async (req, res) => {
 });
 
 router.get("/assigndToMe", auth, async (req, res) => {
-    if(!req.user.roles.includes("nurse")) return res.status(400).send("Bad Request.");
+    if(!req.user.roles.includes("Nurse")) return res.status(400).send("Bad Request.");
 
     let nurse = await getNurseById(req.user.nurseid);
     let namedList = await getNamedList(nurse);
