@@ -72,7 +72,7 @@ async function getNamedList(nurse){
   let list = nurse.assignedTo;
   for(let patientid in list){
     let patientname = await getPatient(patientid);
-    patientname = await getUserById(patient.userid);
+    patientname = await getUserById(patientname.userid);
     let patient = {
       patientid: patientid,
       patientname: patientname
@@ -83,9 +83,6 @@ async function getNamedList(nurse){
 }
 
 async function assignPatient(nurse, patientid){
-  console.log(nurse.assignedTo);
-  nurse.assignedTo.push(patientid);
-  console.log(nurse.assignedTo);
   nurse.assignedTo.push(patientid);
   try{
     nurse = await nurse.save();
