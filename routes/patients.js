@@ -82,6 +82,7 @@ router.get("/:patientid", auth, async(req, res) => {
         if(!condition5) return res.status(403).send("Forbidden");
     }
     
+    
     console.log("getpatient",req.params.patientid);
 
     let patient = await getPatient(req.params.patientid);
