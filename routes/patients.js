@@ -81,6 +81,8 @@ router.get("/:patientid", auth, async(req, res) => {
         let condition5 = await getNurseById(req.user.nurseid).assignedTo.includes(req.params.patientid);
         if(!condition5) return res.status(403).send("Forbidden");
     }
+    
+    console.log("getpatient",req.params.patientid);
 
     let patient = await getPatient(req.params.patientid);
     if(!patient) return res.status(404).send("User not found.");
