@@ -66,6 +66,7 @@ async function getTreatmentByQuery(query){
   let treatments = [];
   try{
     treatments = await Treatment.find(query);
+    if(!treatments) return [];
     for(let i=0;i<treatments.length;i++){
       treatments[i] = decrypt(treatments[i]);
     }
