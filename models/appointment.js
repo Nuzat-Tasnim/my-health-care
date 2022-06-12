@@ -61,9 +61,7 @@ async function createAppointment(doctorid, patientid, date){
     patient.myDoctors.push(doctorid);
     await patient.save();
 
-    //
-    // Set reminder here.
-    //
+  
 
     return appointment;
   }
