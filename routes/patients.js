@@ -36,6 +36,7 @@ router.put("/update/:patientid", auth, async(req, res) => {
     res.send(patient);
 });
 
+
 router.post("/create", auth, async (req, res) => {
 
     let user = await getUserById(req.body.userid);
