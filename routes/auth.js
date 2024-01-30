@@ -5,7 +5,7 @@ const {User, getUserById, validate, createUser, login} = require("../models/user
 
 
 router.post("/login", async (req, res) => {
-    // console.log(req.body.email, req.body.password);
+    console.log(req.body.email, req.body.password);
     let user = await login(req.body.email, req.body.password);
     if(!user) return res.status(401).send("Wrong Credentials!");
     
