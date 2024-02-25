@@ -46,7 +46,7 @@ router.post("/logEntry", async (req, res) => {
 });
 
 router.post("/logs/:adminid", async (req, res) => {
-    let admin = await getAdmin(req.body.adminid);
+    let admin = await getAdmin(req.params.adminid);
     if(!admin) return res.status(404).send("User not found.");
 
     let adminLogs = await logs(req.params.adminid);
