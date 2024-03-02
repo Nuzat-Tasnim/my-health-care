@@ -2,6 +2,7 @@ const express = require("express");
 const req = require("express/lib/request");
 const router = express.Router();
 const auth = require("../middleware/auth");
+const {getPatient} = require("../models/patient")
 const {createTreatment, getTreatment, getTreatmentByQuery, getPlotValues} = require("../models/treatment");
 
 router.get("/patient/:patientid", auth, async (req, res) => {
