@@ -1,12 +1,21 @@
-Date.prototype.addDays = function(days) {
-  var date = new Date(this.valueOf());
-  date.setDate(date.getDate() + days);
-  return date;
-}
+// Date.prototype.addDays = function(days) {
+//   var date = new Date(this.valueOf());
+//   date.setDate(date.getDate() + days);
+//   return date;
+// }
 
 // var date = new Date();
 
 // console.log(date.addDays(5));
+
+// Example usage
+
+    // .then(doctorGroups => {
+    //     console.log(doctorGroups);
+    // })
+    // .catch(error => {
+    //     console.error('Error:', error);
+    // });
 
 
 
@@ -34,9 +43,27 @@ Date.prototype.addDays = function(days) {
 
 
 
-// const CryptoJS = require("crypto-js");
+const CryptoJS = require("crypto-js");
+const config = require("config");
+
 
 // let obj = {"id": 123, "name": "turna", "age": 12};
+
+let obj = {
+  "symptom": "U2FsdGVkX1/1fK05d0AhD8ys9BASRYJ9EzyZgqAEyOQ=",
+  "assessment": "U2FsdGVkX1/HgkZ2SEuovoA0GoggRXR6kclQcJRCokU=",
+  "prescription": "U2FsdGVkX19QjcNURRSo/CfwEZfU6rcPANMcYn5Sh9g=",
+  "duration": "U2FsdGVkX1/0Ws1NvyCGMZAFbQTRaepbSrWsw6ND5as=",
+  "weight": 70,
+  "pressureHigh": 120,
+  "pressureLow": 80,
+  "sugarLevel": 40,
+  "date": {
+    "$date": "2022-06-12T04:06:01.255Z"
+  },
+  "nurseAssigned": [],
+  "__v": 0
+}
 
 // let x = obj.entries;
 // for (element in x){
@@ -44,13 +71,13 @@ Date.prototype.addDays = function(days) {
 //   // Encrypt
 //   let ciphertext = CryptoJS.AES.encrypt(element, config.get('jwtPrivateKey')).toString();
 
-//   // Decrypt
-//   let bytes  = CryptoJS.AES.decrypt(ciphertext, config.get('jwtPrivateKey'));
-//   let originalText = bytes.toString(CryptoJS.enc.Utf8);
+  // // Decrypt
+  // let bytes  = CryptoJS.AES.decrypt(obj, "healthCare2022");
+  // let originalText = bytes.toString(CryptoJS.enc.Utf8);
 
-//   console.log(ciphertext);
-//   console.log(originalText); // 'my message'
-// }
+  // console.log(bytes);
+  // console.log(originalText); // 'my message'
+
 
 
 
@@ -485,22 +512,24 @@ Date.prototype.addDays = function(days) {
 //       }
 //   ]
 // }
-let ar = [6,5,4];
-let date = new Date();
-date = date.getDay();
-console.log(date, typeof(date), ar.includes(date));
 
-let namedList = [];
-let patientid = 1;
-let patientname = "a"
-for (let i = 0;i<3;i++){
-  let patientNew = {
-    patientid: patientid,
-    patientname: patientname
-  }
-  namedList.push(patientNew);
-  patientid+=1;
-  patientname+="a";
-}
-console.log("list",namedList);
+
+// let ar = [6,5,4];
+// let date = new Date();
+// date = date.getDay();
+// console.log(date, typeof(date), ar.includes(date));
+
+// let namedList = [];
+// let patientid = 1;
+// let patientname = "a"
+// for (let i = 0;i<3;i++){
+//   let patientNew = {
+//     patientid: patientid,
+//     patientname: patientname
+//   }
+//   namedList.push(patientNew);
+//   patientid+=1;
+//   patientname+="a";
+// }
+// console.log("list",namedList);
 

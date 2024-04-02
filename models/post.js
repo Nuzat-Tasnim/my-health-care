@@ -36,7 +36,7 @@ async function createPost(userid, username, bloodType, text, contact){
       bloodtype: bloodType,
       text: text,
       contact: contact,
-      date: new Date()
+      date: new Date().toLocaleDateString()
     });
     post = await post.save();
     return post;

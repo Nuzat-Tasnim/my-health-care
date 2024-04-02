@@ -3,6 +3,7 @@ const req = require("express/lib/request");
 const router = express.Router();
 const auth = require("../middleware/auth");
 const {createTreatment, getTreatment, getTreatmentByQuery, getPlotValues} = require("../models/treatment");
+const {getPatient} = require("../models/patient")
 
 router.get("/patient/:patientid", auth, async (req, res) => {
     let condition2 = req.user.roles.includes("Doctor");
@@ -14,8 +15,13 @@ router.get("/patient/:patientid", auth, async (req, res) => {
     let patient = await getPatient(req.params.patientid);
     if(!patient) return res.status(404).send("User not found.");
 
-    let treatments = patient.treatments;
-    if(!treatments || treatments.length<1) return res.status(500).send("Something went wrong! Please try again later.");
+    let treatmentIds = patient.treatments;
+    // if(!treatmentIds || treatmentIds.length<1) return res.status(500).send("Something went wrong! Please try again later.");
+    const treatments = []
+    treatmentIds.forEach(async treatmentId => {
+        treatments.push(await getTreatment(treatmentId))
+    });
+    console.log(treatments)
     res.send(treatments);
 });
 

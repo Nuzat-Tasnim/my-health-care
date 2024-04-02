@@ -5,11 +5,17 @@ const {User, getUserById, validate, createUser, login} = require("../models/user
 
 
 router.post("/login", async (req, res) => {
-    // console.log(req.body.email, req.body.password);
+    console.log(req.body.email, req.body.password);
     let user = await login(req.body.email, req.body.password);
-    if(!user) return res.status(401).send("Wrong Credentials!");
+    if(!user) console.log("wrong credentials");
+    if(!user) {
+        console.log("sending string as response")
+        return res.status(401).send("Wrong Credentials entered!")
+        return res.status(401).send("Wrong Credentials!");
+    }
     
     const token = user.generateAuthToken();
+    console.log(token);
     res.header("x-auth-token", token).send(user);
 });
 
@@ -22,6 +28,7 @@ router.get("/refreshToken", auth, async(req, res) => {
 
 router.post("/register", async (req, res) => {
     const { error } = validate(req.body); // check the validate function once more
+    console.log(req.body)
     if (error) return res.status(400).send(error.details[0].message);
     
     let user = await User.findOne({email: req.body.email});

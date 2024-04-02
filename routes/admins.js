@@ -14,6 +14,13 @@ router.post("/create", auth, async (req, res) => {
     res.send(admin);
 });
 
+router.get("/:adminid", auth, async(req, res) => {
+    if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");
+
+    let admin = await getAdmin(req.params.adminid);
+    return admin
+})
+
 router.get("/unapproved", auth, async (req, res) => {
 
     if(!req.user.roles.includes("Admin")) return res.status(403).send("Forbidden.");

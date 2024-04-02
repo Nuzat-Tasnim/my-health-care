@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const { addRoles } = require("../models/user");
 const { decryptString, encryptString } = require("../cryptoJS/aes");
 
-var dateObj = new Date();
+var dateObj = new Date().toLocaleDateString();
 
 const Patient = mongoose.model('Patient', new mongoose.Schema({
   userid: {
@@ -65,7 +65,7 @@ async function updateProfile(patient, bloodtype, allergies, medicalHistories){
     patient.allergies= allergies;
     patient.bloodtype= bloodtype;
     patient.medicalHistories = medicalHistories;
-    patient = encrypt(patient);
+    // patient = encrypt(patient);
     patient = await patient.save();
     return patient;
   }
@@ -84,10 +84,10 @@ async function addTreatment(patient, treatmentid){
 }
 
 async function getPatient(patientId){
-  console.log("inside",patientId);
   let patient = await Patient.findById(patientId);
-  console.log("but", patient);
-  return decrypt(patient);
+  // console.log(patient);
+  // return decrypt(patient);
+  return patient;
 }
 
 

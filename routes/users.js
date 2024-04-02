@@ -37,11 +37,14 @@ router.get("/:userid", auth, async (req, res) => {
 });
 
 router.post("/editUser/:userid", auth, async (req, res) => {
+    console.log("editUser is requested")
     let user = await getUserById(req.params.userid);
+    console.log("user is retrieved", req.params.userid, "-->", user)
+    
 
     if(req.user._id != req.params.userid) return res.status(403).send("Forbidden.");
 
-    user = editUser(user, req.body.name, req.body.gender, req.body.birthdate, req.body.address, req.body.contact);
+    user = editUser(user, req.body.name, req.body.gender, req.body.year, req.body.month, req.body.day, req.body.address, req.body.contact);
     if(typeof(user) === "string") return res.status(400).send(user);
 
     //fix this

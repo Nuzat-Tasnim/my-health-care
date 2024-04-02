@@ -9,7 +9,7 @@ const res = require('express/lib/response');
 const userSchema = new mongoose.Schema({
   name: { type: String },
   gender: { type: String },
-  birthdate: { type: Date  },
+  birthdate: { type: String  },
   age: { type: Number },
   address: { type: String },
   contact: { type: String },
@@ -53,7 +53,7 @@ function validate(user) {
   const schema = Joi.object({
     name: Joi.string().required(),
     gender: Joi.string().required(),
-    birthdate: Joi.date(),
+    // birthdate: Joi.date(),
     address: Joi.string(),
     contact: Joi.string(),
     email: Joi.string().email(),
@@ -65,8 +65,7 @@ function validate(user) {
 }
 
 async function createUser(name, gender, birthdate, email, password){
-  if(birthdate.includes("/")) birthdate = birthdate.replace(/\//g, "-");
-  let date = new Date(birthdate);
+  let date = new Date(birthdate).toLocaleDateString();
 
   let user = new User({
     name: name,
@@ -97,9 +96,15 @@ async function login(email, password){
 }
 
 
-async function editUser(user, name, gender, birthdate, address, contact){
-  if(birthdate.includes("/")) birthdate = birthdate.replace(/\//g, "-");
-  birthdate = new Date(birthdate);
+async function editUser(user, name, gender, year, month, day, address, contact){
+  // if(birthdate.includes("/")) birthdate = birthdate.replace(/\//g, "-");
+  birthdate = new Date(year, month-1, day).toLocaleDateString();;
+  // let bd = new Date(year.toString()+"-"+(month-1).toString()+"-"+day.toString()).toLocaleDateString();
+  // console.log(year, month, day);
+  console.log(birthdate);
+  // console.log(bd);
+
+  console.log("whats the issue??");
 
   user.name = name;
   user.gender = gender;
@@ -110,21 +115,27 @@ console.log("1==", user);
   let {error} = validate({
     name: user.name,
     gender: user.gender,
-    birthdate: user.birthdate,
+    // birthdate: user.birthdate,
     address: user.address,
     contact: user.contact,
     email: user.email,
     password: user.password
   });
-  if(error) return error.details[0].message;
+  if(error) {
+    return error.details[0].message;
+  }
 
   try{
 
-    console.log("2==",user);
+    // console.log("2==",user);
     user = await user.save();
+    console.log("user.save ");
+    console.log(user);
     return user;
   }
   catch(err){
+    console.log(err);
+
     return err;
   }
 }
@@ -139,7 +150,7 @@ async function addRoles(user, role, id, idKey){
 
     //token fix this one
     let token = user.generateAuthToken();
-    console.log(token);
+    // console.log(token);
     return token;
   }
   catch(err){ 
@@ -150,7 +161,7 @@ async function addRoles(user, role, id, idKey){
 
 async function getUsers() {
   let users = await User.find().sort("name");
-  console.log("list of users:", users);
+  // console.log("list of users:", users);
   return users;
 }
 
@@ -194,7 +205,7 @@ async function searchUser(name, category){
 async function removeUser(user) {
   try{
     let result = await user.remove();
-    console.log(result);
+    // console.log(result);
     return result;
   }
   catch(error){

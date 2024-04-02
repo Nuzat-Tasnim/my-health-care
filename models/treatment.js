@@ -50,16 +50,17 @@ async function createTreatment(symptom, assessment, prescription, duration, weig
     pressureHigh: pressureHigh,
     pressureLow: pressureLow,
     sugarLevel: sugarLevel,
-    date: new Date()
+    date: new Date().toLocaleDateString()
   });
-  treatment = encrypt(treatment);
+  // treatment = encrypt(treatment);
   treatment = await treatment.save();
   return treatment;
 }
 
 async function getTreatment(treatmentId){
   let treatment = await Treatment.findById(treatmentId)
-  return decrypt(treatment);
+  // return decrypt(treatment);
+  return treatment;
 }
 
 async function getTreatmentByQuery(query){
@@ -67,9 +68,9 @@ async function getTreatmentByQuery(query){
   try{
     treatments = await Treatment.find(query);
     if(!treatments) return [];
-    for(let i=0;i<treatments.length;i++){
-      treatments[i] = decrypt(treatments[i]);
-    }
+    // for(let i=0;i<treatments.length;i++){
+    //   treatments[i] = decrypt(treatments[i]);
+    // }
     return treatments;
   }
   catch(err){ return null; }
@@ -84,7 +85,7 @@ async function getPlotValues(patientid){
   for(let i=0;i<treatments.length;i++){
     let treatment = treatments[i];
     treatment = await getTreatment(treatment);
-    treatment = decrypt(treatment);
+    // treatment = decrypt(treatment);
     let value = {
       date: treatment.date,
       weight: treatment.weight,

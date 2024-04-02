@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const {getUserById, addRoles} = require("../models/user");
+const {User, getUserById, addRoles} = require("../models/user");
+const { func } = require('joi');
 
 
 const Doctor = mongoose.model('Doctor', new mongoose.Schema({
@@ -43,6 +44,14 @@ async function createDoctor(user, userid, areaOfExpertise){
   }
 }
 
+async function editDoctor(doctorid, areaOfExpertise, schedule){
+  let doctor = await Doctor.findById(doctorid);
+  doctor.areaOfExpertise = areaOfExpertise;
+  doctor.schedule = schedule
+  doctor = doctor.save();
+  return doctor
+}
+
 async function approveDoctor(doctor, adminid){
   doctor.approvedBy = adminid;
   let user = await getUserById(doctor.userid);
@@ -64,8 +73,6 @@ async function getUnapprovedDoctorList(){
   return doctorList;
 }
 
-
-
 async function rateDoctor(doctorid, rate){
     let doctor = await Doctor.findById(doctorid);
     doctor.rate = rate;
@@ -81,6 +88,11 @@ async function rateDoctor(doctorid, rate){
 
 async function getDoctor(doctorid){
   let doctor = await Doctor.findById(doctorid);
+  return doctor;
+}
+
+async function getDoctorWithName(doctorid){
+  let doctor = await Doctor.findById(doctorid).populate({path: "userid", select: "name"});;
   return doctor;
 }
 
@@ -114,11 +126,21 @@ async function addSchedule(doctor, scheduleid){
   }
 }
 
+async function getDoctorByDepartment(areaOfExpertise){
+  let result = await Doctor.find({areaOfExpertise: { $regex: areaOfExpertise, $options: 'i' } }).populate({path: "userid", select: "name"});
+  return result;
+}
+
+
+
 exports.createDoctor = createDoctor;
+exports.editDoctor = editDoctor;
 exports.addSchedule = addSchedule;
 exports.getDoctor = getDoctor;
+exports.getDoctorWithName = getDoctorWithName;
 exports.approveDoctor = approveDoctor;
 exports.getUnapprovedDoctorList = getUnapprovedDoctorList;
 exports.rateDoctor = rateDoctor;
 exports.searchDoctor = searchDoctor;
+exports.getDoctorByDepartment = getDoctorByDepartment;
 

@@ -4,13 +4,30 @@ const auth = require("../middleware/auth");
 const { getUserById, searchAllUsers } = require("../models/user");
 const { createReview } = require("../models/review");
 const { getPatient } = require("../models/patient");
-const { getDoctor, searchDoctor, createDoctor, addSchedule, approveDoctor, getUnapprovedDoctorList} = require("../models/doctor");
+const {createSchedule} = require("../models/schedule");
+const { getDoctor, editDoctor,getDoctorWithName, searchDoctor, createDoctor, addSchedule, approveDoctor, getDoctorByDepartment, getUnapprovedDoctorList} = require("../models/doctor");
 
 router.post("/search", async (req, res) => {
     // let doctors = await getDoctorByName(req.body.name);
     let doctors = await searchAllUsers(req.body.name);
 
     res.send(doctors);
+});
+
+router.post("/seek", async (req, res) => {
+
+    let result = await getDoctorByDepartment(req.body.areaOfExpertise);
+    res.send(result);
+});
+
+router.put("/edit", async (req, res) => {
+
+    let doctor = await getDoctor(req.body.doctorid);
+    let schedule = await createSchedule(req.body.from, req.body.to, req.body.days, req.body.maxApppointment);
+    let doctorNew = await editDoctor(doctor, req.body.areaOfExpertise, schedule);
+    let doctorWithName = await getDoctorWithName(req.body.doctorid);
+    console.log(doctorWithName);
+    res.send(doctorWithName);
 });
 
 router.post("/create", auth, async (req, res) => {
@@ -75,10 +92,18 @@ router.put("/approve", auth, async (req, res) => {
 });
 
 router.get("/:doctorid", auth, async (req, res) => {
-    let doctor = await getDoctor(req.params.doctorid);
+    let doctor = await getDoctorWithName(req.params.doctorid);
     if(!doctor) return res.status(404).send("User not found.");
+    console.log("requesting doctor");
+    console.log(doctor);
     res.send(doctor);
 });
 
+router.get("/getDoctorsByDepartment", async(req, res) => {
+    let result = await getDoctorsGroupedByAreaOfExpertise();
+    console.log("requesting getDoctorsByDepartment")
+    console.log(result);
+    res.send(result);
+});
 
 module.exports = router; 

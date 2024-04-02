@@ -6,10 +6,13 @@ function auth(req, res, next){
     if(!token) return res.status(401).send("Access Denied. No token provided.");
 
     try{
-        console.log(token);
-        const decoded = jwt.decode(token);
-        console.log(token,'\n',decoded);
-        req.user = decoded;
+        // console.log(token);
+        const cleanedToken = token.replace(/^"(.*)"$/, '$1');
+        const decoded = jwt.decode(cleanedToken);
+        // console.log(cleanedToken, " ", typeof cleanedToken,'\n',
+        //             decoded, " ", typeof decoded);
+        req.user = decoded;  // attaching the user object with req
+        // console.log("decoded -->",decoded)
         next()
     }
     catch(ex) {

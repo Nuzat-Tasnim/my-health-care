@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const { getUserById } = require("./user");
 const { getSchedule } = require("./schedule");
-const { getDoctor } = require("./doctor");
+const { getDoctor, getDoctorWithName } = require("./doctor");
 const { getPatient } = require("./patient");
 
 const Appointment = mongoose.model('Appointment', new mongoose.Schema({
@@ -18,28 +18,39 @@ const Appointment = mongoose.model('Appointment', new mongoose.Schema({
   },
   doctorname: { type: String },
   patientname: { type: String },
-  date: { type: Date },
-  serial: { type: Number }
+  date: { type: String },
+  serial: { type: Number },
+  schedule: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Schedule"
+  }
   
 }));
 
-async function createAppointment(doctorid, patientid, date){
+async function createAppointment(doctorid, patientid, year, month, day){
 
-  if(date.includes("/")) date = date.replace(/\//g, "-");
   let count = 1;
+  let date = new Date(year, month-1, day).toLocaleDateString();
+
   try{
     count += await Appointment.count({"doctor": doctorid, "date": date});
   }
   catch(err){ return null; }
-  let doctorname="", patientname = "";
+  let doctorname="", patientname = "", schedule = "";
   try{
-    let doctor = await getDoctor(doctorid);
-    doctor = await getUserById(doctor.userid);
-    doctorname = doctor.name;
+    let doctor = await getDoctorWithName(doctorid);
+    // let doctor = await getDoctor(doctorid);
+    // doctor = await getUserById(doctor.userid);
+    // console.log(doctor);
+    doctorname = doctor.userid.name;
+    schedule = doctor.schedule;
+    // console.log(doctor);
+    // console.log(doctor.schedule);
 
     let patient = await getPatient(patientid);
     patient = await getUserById(patient.userid);
     patientname = patient.name;
+
   }
   catch(err){
     console.log(err);
@@ -52,16 +63,17 @@ async function createAppointment(doctorid, patientid, date){
       doctorname: doctorname,
       patient: patientid,
       patientname: patientname,
-      date: new Date(date),
+      date: date,
+      schedule: schedule,
       serial: count
     });
     appointment = await appointment.save();
+    // console.log("saved appointment");
+    // console.log(appointment);
 
     let patient = await getPatient(patientid);
-    patient.myDoctors.push(doctorid);
+    if(!(patient.myDoctors.includes(doctorid))) patient.myDoctors.push(doctorid);
     await patient.save();
-
-  
 
     return appointment;
   }
@@ -82,15 +94,21 @@ async function getAppointmentByQuery(query){
   catch(err){ return null; }
 }
 
-async function validate(doctor, patientid, date){
-    if(date.includes("/")) date = date.replace(/\//g, "-");
+async function getAppointmentScheduleByQuery(query){
+  try{
+    let appointments = await Appointment.find(query).populate({path: "schedule", select: "to from"});
+    // console.log(query);
+    // console.log(appointments);
+    return appointments;
 
-    date = new Date(date);
+  }
+  catch(err){ return null; }
+}
+
+async function validate(doctor, patientid, year, month, day){
+
+    let date = new Date(year, month-1, day).toLocaleDateString();
     doctorSchedule = await getSchedule(doctor.schedule);
-
-    let result = doctorSchedule.days.includes(date.getDay());
-    console.log("includes", date.getDay());
-    if(!result) return false;
 
     try{
       let appointment = await Appointment.findOne({"doctor": doctor._id, "patient": patientid, "date": date});
@@ -108,6 +126,11 @@ async function validate(doctor, patientid, date){
 
     if(appointmentsTaken < doctorSchedule.maxAppointment) return true
     else return false;
+}
+
+async function getAppointmentWithSchedule(appointmentId){
+  let appointment = await Appointment.find(appointmentId).populate({path: "schedule", select: "to from"});
+  return appointment;
 }
 
 
@@ -131,6 +154,7 @@ exports.Appointment = Appointment;
 exports.createAppointment = createAppointment; 
 exports.getAppointmentById = getAppointmentById;
 exports.getAppointmentByQuery = getAppointmentByQuery;
+exports.getAppointmentScheduleByQuery = getAppointmentScheduleByQuery;
 exports.validate = validate;
 
 // exports.getAppointmentByDoctorId = getAppointmentByDoctorId;

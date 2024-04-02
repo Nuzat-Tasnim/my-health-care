@@ -54,7 +54,7 @@ async function getAdmin(adminid){
 }
 
 async function logEntry(text, admin){
-  text += "\t"+ new Date().toString();
+  text += "\t"+ new Date().toLocaleDateString();
   admin.log.push(text);
   admin = await admin.save()
   return admin;

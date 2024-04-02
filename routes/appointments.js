@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 const { getUserById } = require("../models/user");
 const { getDoctor } = require("../models/doctor");
 const { createPatient, getPatient } = require("../models/patient");
-const {Appointment, createAppointment, validate, getAppointmentByQuery, getAppointmentById} = require("../models/appointment");
+const {Appointment, createAppointment, validate, getAppointmentByQuery, getAppointmentById, getAppointmentScheduleByQuery} = require("../models/appointment");
 
 router.post("/set", auth, async(req, res) => {
     let doctor = await getDoctor(req.body.doctorid);
@@ -18,13 +18,15 @@ router.post("/set", auth, async(req, res) => {
     }
     else patientid = req.user.patientid;
 
-    let valid = await validate(doctor, patientid, req.body.date);
+    let valid = await validate(doctor, patientid, req.body.year, req.body.month, req.body.day);
+    console.log("appointment validity", valid);
     if(valid === false)  return res.status(400).send("Please choose another date for appointment.");
 
     if(valid === null) return res.status(500).send("Something went wrong! PLease try again later.");
 
     if(valid){
-        let appointment = await createAppointment(req.body.doctorid,patientid, req.body.date);
+        let appointment = await createAppointment(req.body.doctorid,patientid, req.body.year, req.body.month, req.body.day);
+        console.log(appointment)
         if(!appointment) return res.status(500).send("Something went wrong! PLease try again later.");
         res.send(appointment);
     }
@@ -36,8 +38,8 @@ router.get("/doctor/:doctorid", auth, async (req, res) => {
 
     if(req.user.doctorid != req.params.doctorid) return res.status(403).send("Forbidden");
 
-    let query = { 'doctorid': req.params.doctorid };
-    let appointments = await getAppointmentByQuery(query);
+    let query = { 'doctor': req.params.doctorid };
+    let appointments = await getAppointmentScheduleByQuery(query);
     if(!appointments) return res.status(500).send("Something went wrong! PLease try again later.");
 
     res.send(appointments);
@@ -49,8 +51,9 @@ router.get("/patient/:patientid", auth, async (req, res) => {
 
     if(req.user.patientid != req.params.patientid) return res.status(403).send("Forbidden");
 
-    let query = { 'patientid': req.params.patientid };
-    let appointments = await getAppointmentByQuery(query);
+    let query = { 'patient': req.params.patientid };
+    let appointments = await getAppointmentScheduleByQuery(query);
+    console.log(appointments);
     res.send(appointments);
 });
 

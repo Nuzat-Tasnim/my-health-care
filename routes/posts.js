@@ -4,7 +4,7 @@ const auth = require("../middleware/auth");
 const {getUserById} = require("../models/user");
 const {createPost, getPost, getPosts, removePost} = require("../models/post");
 
-router.get("/feed", auth, async (req, res) => {
+router.get("/feed", async (req, res) => {
     let posts = await getPosts();
     res.send(posts);
 });

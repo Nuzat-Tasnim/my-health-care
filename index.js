@@ -13,6 +13,8 @@ const posts = require('./routes/posts');
 
 const dataentry = require('./routes/dataentry');
 
+console.log("jwt key", config.get("jwtPrivateKey"));
+// console.log("test var", config.get("testVariable"));
 
 if(!config.get("jwtPrivateKey")){
   console.error("FATAL ERROR: jwtPrivateKey is not defined.");
