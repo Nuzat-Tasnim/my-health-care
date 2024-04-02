@@ -4,7 +4,6 @@ const router = express.Router();
 const auth = require("../middleware/auth");
 const {getPatient} = require("../models/patient")
 const {createTreatment, getTreatment, getTreatmentByQuery, getPlotValues} = require("../models/treatment");
-const {getPatient} = require("../models/patient")
 
 router.get("/patient/:patientid", auth, async (req, res) => {
     let condition2 = req.user.roles.includes("Doctor");
