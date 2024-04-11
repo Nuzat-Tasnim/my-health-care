@@ -32,10 +32,10 @@ router.put("/edit", async (req, res) => {
 
 router.post("/create", auth, async (req, res) => {
 
-    let user = await getUserById(req.body.userid);
-    if(!user) return res.status(404).send("User not found.");
+    // let user = await getUserById(req.body.userid);
+    // if(!user) return res.status(404).send("User not found.");
 
-    let doctor = await createDoctor(user, req.body.userid, req.body.areaOfExpertise);
+    let doctor = await createDoctor( req.body.userid, req.body.areaOfExpertise, req.body.approvedBy);
     if(!doctor) return res.status(500).send("Something went wrong! PLease try again later.");
     return res.send(doctor);
 });

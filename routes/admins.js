@@ -8,7 +8,7 @@ router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    let admin = await createAdmin(user);
+    let admin = await createAdmin(req.body.userid, req.body.adminid);
     if(!admin) return res.status(500).send("Something went wrong! PLease try again later.");
 
     res.send(admin);

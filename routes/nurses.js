@@ -41,7 +41,7 @@ router.post("/create", auth, async (req, res) => {
     let user = await getUserById(req.body.userid);
     if(!user) return res.status(404).send("User not found.");
 
-    let nurse = await createNurse(user);
+    let nurse = await createNurse(req.body.userid, req.body.approvedBy);
     if(!nurse) return res.status(500).send("Something went wrong! PLease try again later.");
 
     res.send(nurse);

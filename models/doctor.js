@@ -28,12 +28,12 @@ const Doctor = mongoose.model('Doctor', new mongoose.Schema({
 }));
 
 
-async function createDoctor(user, userid, areaOfExpertise){
+async function createDoctor(userid, areaOfExpertise, approvedBy){
   try{
     let doctor = new Doctor({
       userid: userid,
       areaOfExpertise: areaOfExpertise,
-      approvedBy: null
+      approvedBy: approvedBy
     });
     doctor = await doctor.save();
     return doctor;
@@ -55,7 +55,7 @@ async function editDoctor(doctorid, areaOfExpertise, schedule){
 async function approveDoctor(doctor, adminid){
   doctor.approvedBy = adminid;
   let user = await getUserById(doctor.userid);
-  user = await addRoles(user, "Doctor", doctor._id, "doctorid");
+  user = await addRoles(doctor.userid, "Doctor", doctor._id);
   if(!user) return null;
 
   try{
@@ -92,7 +92,7 @@ async function getDoctor(doctorid){
 }
 
 async function getDoctorWithName(doctorid){
-  let doctor = await Doctor.findById(doctorid).populate({path: "userid", select: "name"});;
+  let doctor = await Doctor.findById(doctorid).populate({path: "userid", select: "name"});
   return doctor;
 }
 

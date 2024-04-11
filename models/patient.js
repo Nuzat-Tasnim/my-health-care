@@ -50,7 +50,7 @@ async function createPatient(user){
       treatments: []
     });
     patient = await patient.save();
-    user = await addRoles(user, "Patient", patient._id, "patientid");
+    // user = await addRoles(user, "Patient", patient._id);
     if(!user) return null;
     return patient;
   }

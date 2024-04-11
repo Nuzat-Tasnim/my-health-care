@@ -24,9 +24,9 @@ const Nurse = mongoose.model('Nurse', new mongoose.Schema({
   
 }));
 
-async function createNurse(user){
+async function createNurse(userid, approvedBy){
   try{
-    let nurse = new Nurse({userid: user._id, assignedTo:[], approvedBy: null});
+    let nurse = new Nurse({userid: userid, assignedTo:[], approvedBy: approvedBy});
     nurse = await nurse.save();
 
     return nurse;
@@ -37,7 +37,7 @@ async function createNurse(user){
 async function approveNurse(nurse, adminid){
   nurse.approvedBy = adminid;
   let user = await getUserById(nurse.userid);
-  user = await addRoles(user, "Nurse", nurse._id, "nurseid");
+  user = await addRoles(user, "Nurse", nurse._id);
   if(!user) return null;
 
   try{

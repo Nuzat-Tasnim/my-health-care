@@ -66,6 +66,7 @@ function validate(user) {
 
 async function createUser(name, gender, birthdate, email, password){
   let date = new Date(birthdate).toLocaleDateString();
+  console.log(date);
 
   let user = new User({
     name: name,
@@ -140,18 +141,21 @@ console.log("1==", user);
   }
 }
 
-async function addRoles(user, role, id, idKey){
+async function addRoles(userid, role, id){
   try{
-    console.log(user);
-    user.roles.push(role);
-    console.log(user);
+    let user = await getUserById(userid);
+    if(! user.roles.includes(role)) user.roles.push(role);
+
+    let idKey = role.toLowerCase()+"id";
     user[idKey] = id;
     user = await user.save();
+    console.log("came to user");
+    console.log(user);
 
-    //token fix this one
-    let token = user.generateAuthToken();
-    // console.log(token);
-    return token;
+    // //token fix this one
+    // let token = user.generateAuthToken();
+    // // console.log(token);
+    // return token;
   }
   catch(err){ 
     console.log(err);
@@ -215,13 +219,18 @@ async function removeUser(user) {
 }
 
 function getAge(birthDate) {
-  var today = new Date();
-  var age = today.getFullYear() - birthDate.getFullYear();
-  var m = today.getMonth() - birthDate.getMonth();
-  if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-      age--;
-  }
-  return age;
+  // var today = new Date();
+  // var age = today.getFullYear() - birthDate.getFullYear();
+  // var m = today.getMonth() - birthDate.getMonth();
+  // if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+  //     age--;
+  // }
+  // return age;
+  // var rn = new Date()
+  var diff = (new Date() - new Date(birthDate))/(1000*60*60*24);
+  console.log("Age");
+  console.log(~~(diff/365));
+  return ~~(diff/365);
 }
 
 async function searchNotAllUsers(name){

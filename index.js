@@ -9,6 +9,8 @@ const doctors = require('./routes/doctors');
 const nurses = require('./routes/nurses');
 const schedules = require('./routes/schedules');
 const appointments = require('./routes/appointments');
+const applyRequests = require('./routes/applyRequests');
+
 const posts = require('./routes/posts');
 
 const dataentry = require('./routes/dataentry');
@@ -52,6 +54,7 @@ app.use('/doctors', doctors);
 app.use('/nurses', nurses);
 app.use("/schedules",schedules);
 app.use('/appointments', appointments);
+app.use('/applyRequests', applyRequests);
 app.use('/dataentry', dataentry);
 
 

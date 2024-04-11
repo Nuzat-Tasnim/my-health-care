@@ -7,17 +7,24 @@ const Admin = mongoose.model('Admin', new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   },
-  log: [{type: String}]
+  log: [{type: String}],
+  approvedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Admin"
+  }
   
 }));
 
-async function createAdmin(user){
+async function createAdmin(userid, adminid){
   try{
-    let admin = new Admin({userid: user._id, log: []});
+    console.log("came here");
+    console.log(userid, adminid);
+    let admin = new Admin({userid: userid, log: [], approvedBy: adminid});
     admin = await admin.save();
+    console.log(admin);
 
-    user = await addRoles(user, "Admin", admin._id, "adminid");
-    if(!user) return null;
+    // user = await addRoles(user, "Admin", admin._id, "adminid");
+    // if(!user) return null;
 
     return admin;
   }
@@ -30,7 +37,7 @@ async function createAdmin(user){
 async function approveAdmin(admin, adminid){
   admin.approvedBy = adminid;
   let user = await getUserById(admin.userid);
-  user = await addRoles(user, "Admin", admin._id, "adminid");
+  user = await addRoles(admin.userid, "Admin", admin._id);
   if(!user) return null;
 
   try{
